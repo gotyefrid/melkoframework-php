@@ -5,6 +5,10 @@ namespace core;
 class Controller
 {
     public $layout = 'main';
+
+    /**
+     * @var Request|null
+     */
     public $request = null;
 
     public function __construct()
@@ -47,12 +51,20 @@ class Controller
         return $this->renderPhpFile($layoutPath, ['content' => $content]);
     }
 
-    public function redirect(string $path, bool $absolute = false): void
+    /**
+     * @param string $path
+     * @param bool $absolute
+     *
+     * @return int
+     */
+    public function redirect(string $path, bool $absolute = false): int
     {
         if ($absolute) {
             header('Location: ' . $path);
+            exit();
         }
 
         header('Location: ' . '?path=' . $path);
+        exit();
     }
 }

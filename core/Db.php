@@ -38,7 +38,7 @@ class Db
 
     public static function getConnection(): PDO
     {
-        return new PDO('sqlite:database.db');
+        return new PDO('sqlite:' . self::$dbPath);
     }
 
     public static function find(string $sql, array $params = []): array

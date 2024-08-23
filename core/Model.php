@@ -6,7 +6,15 @@ use PDO;
 
 abstract class Model
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var array
+     */
+    public $errors;
 
     abstract public static function tableName(): string;
 
@@ -99,4 +107,5 @@ abstract class Model
         return false;
     }
 
+    abstract public function validate(): bool;
 }

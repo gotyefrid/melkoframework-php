@@ -30,4 +30,17 @@ class User extends Model
     {
         return self::findOne(['username' => $username]);
     }
+
+    public function validate(): bool
+    {
+        if (!$this->password) {
+            $this->errors['password'] = 'Необходимо заполнить пароль';
+        }
+
+        if (!$this->username) {
+            $this->errors['username'] = 'Необходимо заполнить имя пользователя';
+        }
+
+        return empty($this->errors);
+    }
 }

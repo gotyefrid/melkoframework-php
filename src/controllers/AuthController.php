@@ -16,19 +16,36 @@ class AuthController extends Controller
     public function __construct()
     {
         parent::__construct();
-        
+
         $this->auth = new Auth();
     }
 
     public function actionLogin()
     {
-        if ($this->auth->login('admin', 'admin')) {
-            if (isset($_GET['redirect'])) {
-                $this->redirect($_GET['redirect']);
+        $this->layout = 'login';
+        $errors = [];
+        $user = new User();
+
+        if ($this->request->isPost()) {
+            $user->username = $_POST['username'] ?? null;
+            $user->password = $_POST['password'] ?? null;
+
+            if (!$user->validate()) {
+                $errors = $user->errors;
             }
 
-            $this->redirect('home/index');
+            if ($this->auth->login($user->username, $user->password)) {
+                if (isset($_GET['redirect'])) {
+                    return $this->redirect($_GET['redirect'], true);
+                }
+
+                return $this->redirect('home/index');
+            } else {
+                $errors['general'] = ['Неверный логин или пароль'];
+            }
         }
+
+        return $this->render('login', ['errors' => $errors, 'model' => $user]);
     }
 
     public function actionLogout()
@@ -36,12 +53,16 @@ class AuthController extends Controller
         $this->auth->logout();
 
         $referrer = $_SERVER['HTTP_REFERER'] ?? null;
+        $redirect = $_GET['redirect'] ?? null;
+
+        if ($redirect) {
+            $this->redirect($redirect, true);
+        }
 
         if ($referrer) {
             $this->redirect($referrer, true);
         }
 
-        var_dump(1234);die;
-        $this->redirect('home/test');
+        $this->redirect('/');
     }
 }

@@ -23,4 +23,9 @@ class Request
     {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
+
+    public function isPost(): bool
+    {
+        return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
 }
