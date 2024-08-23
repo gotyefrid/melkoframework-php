@@ -3,7 +3,12 @@
 use core\helpers\Url;
 
 ?>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<style>
+    .nav-link {
+        color: rgb(255 255 255 / 80%)!important;
+    }
+</style>
+<nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Переключение навигации">

@@ -7,6 +7,8 @@ use core\helpers\Renderer;
 
 class Controller
 {
+    public $title = 'Заголовок';
+
     public $layout = 'main';
 
     /**
@@ -24,14 +26,15 @@ class Controller
         $path = __DIR__ . '/../src/views/' . $this->request->getController() . '/' . $view . '.php';
 
         if (!file_exists($path)) {
-            throw new NotFoundException("Файл вида ($path) не найден");
+            $showPath = '../views/' . $this->request->getController() . '/' . $view . '.php';
+            throw new NotFoundException("Файл вида ($showPath) не найден");
         }
 
         $content = Renderer::render($path, $params);
 
         $layoutPath = __DIR__ . '/../src/views/layouts/' . $this->layout . '.php';
 
-        return Renderer::render($layoutPath, ['content' => $content]);
+        return Renderer::render($layoutPath, ['content' => $content, 'title' => $this->title]);
     }
 
     /**

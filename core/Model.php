@@ -4,7 +4,7 @@ namespace core;
 
 use PDO;
 
-abstract class Model
+abstract class Model implements \ArrayAccess
 {
     /**
      * @var int
@@ -108,4 +108,28 @@ abstract class Model
     }
 
     abstract public function validate(): bool;
+
+    public function offsetExists($offset)
+    {
+        return property_exists($this, $offset) && $this->{$offset} !== null;
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->offsetExists($offset) ? $this->{$offset} : null;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{$offset} = $value;
+        }
+    }
+
+    public function offsetUnset($offset)
+    {
+        if ($this->offsetExists($offset)) {
+            $this->{$offset} = null;
+        }
+    }
 }

@@ -50,4 +50,9 @@ class Url
     {
         return self::toRoute('/');
     }
+
+    public static function currentRoute(): string
+    {
+        return $_GET['path'] ?? '';
+    }
 }
