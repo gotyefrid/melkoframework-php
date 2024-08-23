@@ -5,5 +5,3 @@
 use src\models\User;
 
 ?>
-
-Admin login: <?= $user->username ?>
