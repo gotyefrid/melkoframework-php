@@ -19,6 +19,10 @@ class Application
      */
     public function run()
     {
-        echo $this->router->resolve();
+        try {
+            echo $this->router->resolve();
+        } catch (\Throwable $e) {
+            echo (new ErrorHandler($e))->handle();
+        }
     }
 }

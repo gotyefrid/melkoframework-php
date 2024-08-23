@@ -2,6 +2,8 @@
 
 namespace core;
 
+use core\exceptions\NotFoundException;
+
 class Router
 {
     /**
@@ -56,7 +58,7 @@ class Router
         }
 
         $method = $this->request->getMethod();
-        
+
         if ($this->isActionExist()) {
             return $this->callAction();
         }
@@ -64,7 +66,7 @@ class Router
         $callback = $this->routes[$method][$path] ?? false;
 
         if ($callback === false) {
-            throw new \DomainException('Route not found', 404);
+            throw new NotFoundException();
         }
 
         return call_user_func($callback);
@@ -103,7 +105,7 @@ class Router
         $action = 'action' . ucfirst($this->actionName);
 
         if (!$controller || !method_exists($controller, $action)) {
-            throw new \DomainException('Action does not exist', 404);
+            throw new NotFoundException('Экшен не найден');
         }
 
         return $controller->{$action}();
