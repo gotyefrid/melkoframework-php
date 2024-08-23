@@ -55,4 +55,14 @@ class Url
     {
         return $_GET['path'] ?? '';
     }
+
+    public static function currentAction(): string
+    {
+        return isset($_GET['path']) ? (explode('/', $_GET['path'])[1] ?? '') : '';
+    }
+
+    public static function currentController(): string
+    {
+        return isset($_GET['path']) ? (explode('/', $_GET['path'])[0] ?? '') : '';
+    }
 }

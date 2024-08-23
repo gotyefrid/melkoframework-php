@@ -21,7 +21,7 @@ use core\helpers\GridView;
         <tr>
             <?php foreach ($columns as $column => $label): ?>
                 <?php if ($column === '{{actions}}') : ?>
-                    <td><?= $grid->getActionsColumns() ?></td>
+                    <td><?= $grid->getActionsColumns($item['id']) ?></td>
                 <?php else: ?>
                     <td><?= htmlspecialchars($item[$column] ?? '') ?></td>
                 <?php endif; ?>

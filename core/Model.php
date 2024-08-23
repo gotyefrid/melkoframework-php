@@ -11,6 +11,10 @@ abstract class Model implements \ArrayAccess
      */
     public $id;
 
+    public $attributes = [
+        'id'
+    ];
+
     /**
      * @var array
      */
@@ -18,23 +22,32 @@ abstract class Model implements \ArrayAccess
 
     abstract public static function tableName(): string;
 
-    public static function findAll(array $conditions = []): array
+    /**
+     * @param $conditions
+     *
+     * @return array|string
+     */
+    public static function findAll($conditions = []): array
     {
         $sql = 'SELECT * FROM ' . static::tableName();
 
         $params = [];
         if (!empty($conditions)) {
-            $conditionsArray = [];
+            if (is_array($conditions)) {
+                $conditionsArray = [];
 
-            foreach ($conditions as $column => $value) {
-                $conditionsArray[] = "$column = :$column";
-                $params[":$column"] = $value;
+                foreach ($conditions as $column => $value) {
+                    $conditionsArray[] = "$column = :$column";
+                    $params[":$column"] = $value;
+                }
+                $sql .= ' WHERE ' . implode(' AND ', $conditionsArray);
+            } else {
+                $sql .= ' ' . $conditions;
             }
-            $sql .= ' WHERE ' . implode(' AND ', $conditionsArray);
         }
 
         $stmt = Db::getConnection()->prepare($sql);
-        $stmt->execute($params);
+        $stmt->execute(is_array($conditions) ? $params : null);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $res = [];
@@ -52,7 +65,12 @@ abstract class Model implements \ArrayAccess
         return $res;
     }
 
-    public static function findOne(array $conditions = []): ?Model
+    /**
+     * @param string|array $conditions
+     *
+     * @return Model|null
+     */
+    public static function findOne($conditions = []): ?Model
     {
         return self::findAll($conditions)[0] ?? null;
     }
@@ -62,9 +80,19 @@ abstract class Model implements \ArrayAccess
         return self::findAll(['id' => $id])[0] ?? null;
     }
 
+
+    public function delete(): bool
+    {
+        $sql = 'DELETE FROM ' . static::tableName() . ' WHERE id = :id';
+        $stmt = Db::getConnection()->prepare($sql);
+
+        return $stmt->execute([':id' => $this->id]);
+    }
+
     public function save(): bool
     {
         $properties = get_object_vars($this);
+        $properties = array_intersect_key($properties, array_flip($this->attributes));
 
         // Разделение свойств на колонки и их значения
         $columns = array_keys($properties);
@@ -116,7 +144,13 @@ abstract class Model implements \ArrayAccess
 
     public function offsetGet($offset)
     {
-        return $this->offsetExists($offset) ? $this->{$offset} : null;
+        if (method_exists($this, 'get'. ucfirst($offset))) {
+            $data = $this->{'get'. ucfirst($offset)}();
+        } else {
+            $data = $this->{$offset};
+        }
+
+        return $this->offsetExists($offset) ? $data : null;
     }
 
     public function offsetSet($offset, $value)

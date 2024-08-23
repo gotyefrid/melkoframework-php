@@ -2,7 +2,9 @@
 
 namespace src\models;
 
+use core\Db;
 use core\Model;
+use PDO;
 
 class User extends Model
 {
@@ -21,6 +23,12 @@ class User extends Model
      */
     public $password;
 
+    public $attributes = [
+        'id',
+        'username',
+        'password',
+    ];
+
     public static function tableName(): string
     {
         return 'users';
@@ -35,6 +43,21 @@ class User extends Model
     {
         if (!$this->password) {
             $this->errors['password'] = 'Необходимо заполнить пароль';
+        }
+
+        if ($this->id) {
+            $sql = 'SELECT * FROM users WHERE username = :username AND id <> :id LIMIT 1';
+            $stmt = Db::getConnection()->prepare($sql);
+            $stmt->execute([':username' => $this->username, ':id' => $this->id]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($results) {
+                $this->errors['username'] = 'Такой пользователь уже существует';
+            }
+        } else {
+            if (self::findOne(['username' => $this->username])) {
+                $this->errors['username'] = 'Такой пользователь уже существует';
+            }
         }
 
         if (!$this->username) {
