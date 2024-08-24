@@ -8,7 +8,7 @@ use src\models\User;
 
 class UserController extends WithAuthController
 {
-    public $title = 'Пользователи';
+    public static $title = 'Пользователи';
 
     public function actionIndex()
     {
