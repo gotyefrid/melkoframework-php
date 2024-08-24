@@ -6,5 +6,7 @@
             "core\\": "core/"
         }
     },
-    "require": {}
+    "require": {
+        "nilportugues/sql-query-builder": "^1.8"
+    }
 }
