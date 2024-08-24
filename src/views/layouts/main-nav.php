@@ -12,6 +12,16 @@ $items = [
         'label' => HomeController::$title,
     ],
     [
+        'url' => Url::toRoute('statistic/index'),
+        'active' => Url::currentRoute() === 'statistic/index',
+        'label' => StatisticController::$title,
+    ],
+    [
+        'url' => Url::toRoute('statistic/detailClicks'),
+        'active' => Url::currentRoute() === 'statistic/detailClicks',
+        'label' => 'Клики',
+    ],
+    [
         'url' => Url::toRoute('user/index'),
         'active' => Url::currentRoute() === 'user/index',
         'label' => UserController::$title,
