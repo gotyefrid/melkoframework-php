@@ -2,6 +2,7 @@
 
 namespace src\controllers;
 
+use core\Application;
 use core\Controller;
 use core\Db;
 use src\models\Click;
@@ -10,7 +11,13 @@ use src\models\ClickRepository;
 class StatisticController extends Controller
 {
     public static $title = 'Статистика';
-    public static $hideClickPath = __DIR__ . '/../../../index.php';
+    public static $hideClickPath;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this::$hideClickPath = Application::$appPath . '/../index.php';
+    }
 
     public function actionIndex()
     {

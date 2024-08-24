@@ -8,5 +8,5 @@ use core\Db;
 
 Db::initDataBase();
 $app = new Application();
-
+$app::$appPath = __DIR__;
 $app->run();
