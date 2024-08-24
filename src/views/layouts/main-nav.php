@@ -1,16 +1,10 @@
 <?php
 
 use core\helpers\Url;
-use src\controllers\HomeController;
 use src\controllers\StatisticController;
 use src\controllers\UserController;
 
 $items = [
-    [
-        'url' => Url::toRoute('home/index'),
-        'active' => Url::currentRoute() === 'home/index',
-        'label' => HomeController::$title,
-    ],
     [
         'url' => Url::toRoute('statistic/index'),
         'active' => Url::currentRoute() === 'statistic/index',
