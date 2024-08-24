@@ -27,14 +27,16 @@ class AuthController extends Controller
         $user = new User();
 
         if ($this->request->isPost()) {
-            $user->username = $_POST['username'] ?? null;
-            $user->password = $_POST['password'] ?? null;
+            $username = $_POST['username'] ?? null;
+            $password = $_POST['password'] ?? null;
+            $user->username = $username;
 
-            if (!$user->validate()) {
-                $errors = $user->errors;
+            if (!User::findByUsername($username)) {
+                $errors['general'] = ['Пользователь не найден'];
+                return $this->render('login', ['errors' => $errors, 'model' => $user]);
             }
 
-            if ($this->auth->login($user->username, $user->password)) {
+            if ($this->auth->login($username, $password)) {
                 if (isset($_GET['redirect'])) {
                     return $this->redirect($_GET['redirect'], true);
                 }
