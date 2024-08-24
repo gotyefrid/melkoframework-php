@@ -53,6 +53,11 @@ class GridView
         ]);
     }
 
+    /**
+     * @param array<array{attribute: string, label: string, value: callable(mixed): mixed}> $columns
+     *
+     * @return $this
+     */
     public function setColumns(array $columns): self
     {
         $this->columns = $columns;
@@ -67,9 +72,27 @@ class GridView
         } else {
             if ($first = $this->dataProvider[array_key_first($this->dataProvider)]) {
                 if (is_object($first) && $first instanceof Model) {
-                    return array_combine($first->attributes, $first->attributes);
+                    $res = [];
+
+                    foreach ($first->attributes as $attribute) {
+                        $res[] = [
+                            'attribute' => $attribute,
+                            'label' => $attribute,
+                        ];
+                    }
+
+                    return $res;
                 } elseif (is_array($first)) {
-                    return array_combine(array_keys($first), array_keys($first));
+                    $res = [];
+
+                    foreach ($first as $attribute) {
+                        $res[] = [
+                            'attribute' => $attribute,
+                            'label' => $attribute,
+                        ];
+                    }
+
+                    return $res;
                 }
 
                 throw new \DomainException('Неизвестный объект в GridView');
@@ -129,34 +152,34 @@ class GridView
     public function getActionsColumns(int $id): string
     {
         return '
-    <div class="d-flex justify-content-center">
-        <a href="' . Url::toRoute(Url::currentController() . '/update', ['id' => $id]) . '" class="btn btn-warning btn-sm me-2" title="Изменить">
-            <i class="bi bi-pencil"></i>
-        </a>
-        <a href="" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal' . $id . '">
-            <i class="bi bi-trash"></i>
-        </a>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="deleteConfirmModal' . $id . '" tabindex="-1" aria-labelledby="deleteConfirmLabel' . $id . '" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmLabel' . $id . '">Подтверждение удаления</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Вы уверены, что хотите удалить этот элемент?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <a href="' . Url::toRoute(Url::currentController() . '/delete', ['id' => $id]) . '" class="btn btn-danger">Удалить</a>
+        <div class="">
+            <a href="' . Url::toRoute(Url::currentController() . '/update', ['id' => $id]) . '" class="btn btn-warning btn-sm me-2" title="Изменить">
+                <i class="bi bi-pencil"></i>
+            </a>
+            <a href="" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal' . $id . '">
+                <i class="bi bi-trash"></i>
+            </a>
+        </div>
+    
+        <!-- Modal -->
+        <div class="modal fade" id="deleteConfirmModal' . $id . '" tabindex="-1" aria-labelledby="deleteConfirmLabel' . $id . '" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmLabel' . $id . '">Подтверждение удаления</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Вы уверены, что хотите удалить этот элемент?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <a href="' . Url::toRoute(Url::currentController() . '/delete', ['id' => $id]) . '" class="btn btn-danger">Удалить</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    ';
+        ';
     }
 
     public function setActionColumns(array $columns): self
