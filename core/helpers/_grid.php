@@ -15,7 +15,7 @@ use core\helpers\GridView;
         <thead>
         <tr>
             <?php foreach ($columns as $columnData): ?>
-                <th scope="col"><?= htmlspecialchars(ucfirst($columnData['label'])) ?></th>
+                <th scope="col"><?= htmlspecialchars(ucfirst($columnData['label'] ?? $columnData['attribute'])) ?></th>
             <?php endforeach; ?>
         </tr>
         </thead>
