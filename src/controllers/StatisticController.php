@@ -17,6 +17,7 @@ class StatisticController extends Controller
     {
         parent::__construct();
         $this::$hideClickPath = Application::$appPath . '/../index.php';
+        $this->checkAuth();
     }
 
     public function actionIndex()
