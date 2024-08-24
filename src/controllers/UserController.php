@@ -2,13 +2,20 @@
 
 namespace src\controllers;
 
+use core\Controller;
 use core\exceptions\BadRequestException;
 use core\exceptions\NotFoundException;
 use src\models\User;
 
-class UserController extends WithAuthController
+class UserController extends Controller
 {
     public static $title = 'Пользователи';
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->checkAuth();
+    }
 
     public function actionIndex()
     {

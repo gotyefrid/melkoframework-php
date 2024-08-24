@@ -53,4 +53,13 @@ abstract class Controller
         header('Location: ' . '?path=' . $path);
         exit();
     }
+
+    public function checkAuth(): void
+    {
+        $auth = new Auth();
+
+        if (!$auth->isAuthenticated()) {
+            $this->redirect('auth/login');
+        }
+    }
 }
