@@ -41,7 +41,7 @@ class AuthController extends Controller
                     return $this->redirect($_GET['redirect'], true);
                 }
 
-                return $this->redirect('home/index');
+                return $this->redirect('statistic/index');
             } else {
                 $errors['general'] = ['Неверный логин или пароль'];
             }
