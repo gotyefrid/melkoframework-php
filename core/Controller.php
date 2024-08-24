@@ -5,9 +5,9 @@ namespace core;
 use core\exceptions\NotFoundException;
 use core\helpers\Renderer;
 
-class Controller
+abstract class Controller
 {
-    public $title = 'Заголовок';
+    public static $title = 'Заголовок';
 
     public $layout = 'main';
 
@@ -34,7 +34,7 @@ class Controller
 
         $layoutPath = __DIR__ . '/../src/views/layouts/' . $this->layout . '.php';
 
-        return Renderer::render($layoutPath, ['content' => $content, 'title' => $this->title]);
+        return Renderer::render($layoutPath, ['content' => $content, 'title' => $this::$title]);
     }
 
     /**

@@ -6,7 +6,7 @@ require __DIR__ . '/vendor/autoload.php';
 use core\Application;
 use core\Db;
 
-Db::init();
+Db::initDataBase();
 $app = new Application();
 
 $app->run();
