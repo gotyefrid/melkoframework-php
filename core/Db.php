@@ -12,7 +12,6 @@ class Db
     {
         if (!file_exists(self::$dbPath)) {
             self::initUserTable();
-            self::initClicksTable();
         }
     }
 
@@ -61,19 +60,5 @@ class Db
             $query->bindParam(':pass', $passHash);
             $query->execute();
         }
-    }
-
-    private static function initClicksTable()
-    {
-        self::getConnection()->exec("CREATE TABLE IF NOT EXISTS clicks (
-            id INTEGER PRIMARY KEY,
-            created_at TEXT,
-            ban_reason TEXT,
-            white_showed INTEGER,
-            user_agent TEXT,
-            url TEXT,
-            ip TEXT,
-            hideclick_answer TEXT
-        )");
     }
 }
