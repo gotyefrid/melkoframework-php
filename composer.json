@@ -6,5 +6,7 @@
             "core\\": "core/"
         }
     },
-    "require": {}
+    "require": {
+      "ext-pdo": "*"
+    }
 }
