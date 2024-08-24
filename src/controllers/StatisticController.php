@@ -59,17 +59,19 @@ class StatisticController extends Controller
 
         switch ($filter) {
             case 'hideClickCount':
-                $clicks = Click::findAll("WHERE ban_reason = 'hideclick' AND $createdAtWhere");
+                $where = "WHERE ban_reason = 'hideclick' AND $createdAtWhere";
                 break;
             case 'customCloakCount':
-                $clicks = Click::findAll("WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick' AND $createdAtWhere");
+                $where = "WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick' AND $createdAtWhere";
                 break;
             case 'goesToBlack':
-                $clicks = Click::findAll("WHERE white_showed = 0 AND $createdAtWhere");
+                $where = "WHERE white_showed = 0 AND $createdAtWhere";
                 break;
             default:
-                $clicks = Click::findAll($fromDate || $toDate ? "WHERE $createdAtWhere" : []);
+                $where = $fromDate || $toDate ? "WHERE $createdAtWhere" : [];
         }
+
+        $clicks = Click::findAll($where . ' ORDER BY created_at DESC');
 
         return $this->render('detailClicks', [
             'clicks' => $clicks,
