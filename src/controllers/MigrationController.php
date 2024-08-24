@@ -4,6 +4,7 @@ namespace src\controllers;
 
 use core\Controller;
 use core\Db;
+use src\models\User;
 
 class MigrationController extends Controller
 {
@@ -13,9 +14,9 @@ class MigrationController extends Controller
         $this->addColumnToClicksTable();
     }
 
-    public function actionResetAdminPassword()
+    public function actionCreateUser()
     {
-        $this->resetAdminPassword();
+        $this->createUser();
     }
 
     private function initClicksTable()
@@ -56,10 +57,12 @@ class MigrationController extends Controller
         echo 'Колонка hideclick_answer в таблице clicks уже существует <br>';
     }
 
-    private function resetAdminPassword()
+    private function createUser()
     {
-        $defaultPass = password_hash('admin', PASSWORD_DEFAULT);
-        Db::getConnection()->exec("UPDATE users SET password = '$defaultPass' WHERE username = 'admin'");
-        echo 'Пароль сброшен <br>';
+        $user = new User();
+        $user->username = 'user' . random_int(1, 999999);
+        $user->password = password_hash('admin', PASSWORD_DEFAULT);
+        $user->save();
+        echo "Юзер создан: Логин $user->username пароль admin <br>";
     }
 }
