@@ -4,6 +4,8 @@ namespace core;
 
 class Application
 {
+    public static $appPath = __DIR__;
+
     /**
      * @var Router
      */
