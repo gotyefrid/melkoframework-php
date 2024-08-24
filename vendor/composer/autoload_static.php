@@ -15,6 +15,10 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         array (
             'core\\' => 5,
         ),
+        'R' => 
+        array (
+            'Requtize\\QueryBuilder\\' => 22,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -25,6 +29,10 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         'core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
+        ),
+        'Requtize\\QueryBuilder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/requtize/query-builder/src/QueryBuilder',
         ),
     );
 

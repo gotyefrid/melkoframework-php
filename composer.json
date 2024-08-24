@@ -5,5 +5,8 @@
             "src\\": "src/",
             "core\\": "core/"
         }
+    },
+    "require": {
+        "requtize/query-builder": "^1.0"
     }
 }

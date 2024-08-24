@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'src\\' => array($baseDir . '/src'),
     'core\\' => array($baseDir . '/core'),
+    'Requtize\\QueryBuilder\\' => array($vendorDir . '/requtize/query-builder/src/QueryBuilder'),
 );
