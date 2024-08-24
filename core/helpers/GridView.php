@@ -89,21 +89,28 @@ class GridView
     {
         $totalItems = count($this->dataProvider);
         $totalPages = ceil($totalItems / $this->itemsPerPage);
-
         $html = '<nav><ul class="pagination pagination-dark">';
 
-        //if ($this->currentPage > 1) {
-        //    $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl($this->currentPage - 1) . '">Previous</a></li>';
-        //}
+        // Диапазон отображаемых страниц
+        $range = 3;
 
-        for ($i = 1; $i <= $totalPages; $i++) {
+        // Логика для вывода первой страницы, троеточий и последней страницы
+        if ($this->currentPage > 1 + $range) {
+            $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl(1) . '">1</a></li>';
+            $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+
+        // Отображаем страницы в диапазоне
+        for ($i = max(1, $this->currentPage - $range); $i <= min($totalPages, $this->currentPage + $range); $i++) {
             $active = ($i === $this->currentPage) ? ' active' : '';
             $html .= '<li class="page-item' . $active . '"><a class="page-link" href="' . $this->getPagingUrl($i) . '">' . $i . '</a></li>';
         }
 
-        //if ($this->currentPage < $totalPages) {
-        //    $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl($this->currentPage + 1) . '">Next</a></li>';
-        //}
+        // Логика для вывода последней страницы с троеточием перед ней
+        if ($this->currentPage < $totalPages - $range) {
+            $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl($totalPages) . '">' . $totalPages . '</a></li>';
+        }
 
         $html .= '</ul></nav>';
 
