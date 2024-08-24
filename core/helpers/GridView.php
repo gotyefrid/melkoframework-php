@@ -2,6 +2,8 @@
 
 namespace core\helpers;
 
+use core\Model;
+
 class GridView
 {
     private $columns = null;
@@ -37,6 +39,10 @@ class GridView
 
     public function render()
     {
+        if (!$this->dataProvider) {
+            return 'Нет записей';
+        }
+
         $data = $this->pagination ? $this->getPaginatedData() : $this->dataProvider;
 
         return Renderer::render(__DIR__ . '/_grid.php', [
@@ -60,7 +66,13 @@ class GridView
             return $this->columns;
         } else {
             if ($first = $this->dataProvider[array_key_first($this->dataProvider)]) {
-                return array_keys($first);
+                if (is_object($first) && $first instanceof Model) {
+                    return array_combine($first->attributes, $first->attributes);
+                } elseif (is_array($first)) {
+                    return array_combine(array_keys($first), array_keys($first));
+                }
+
+                throw new \DomainException('Неизвестный объект в GridView');
             }
         }
 
@@ -100,7 +112,11 @@ class GridView
 
     private function getPagingUrl(int $page): string
     {
-        return Url::toRoute(Url::currentRoute(), ['page' => $page]);
+        $params = $_GET;
+        unset($params['path']);
+        $params['page'] = $page;
+
+        return Url::toRoute(Url::currentRoute(), $params);
     }
 
     public function getActionsColumns(int $id): string
