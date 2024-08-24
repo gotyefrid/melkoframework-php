@@ -2,6 +2,8 @@
 
 use core\Db;
 
+require __DIR__ . '/vendor/autoload.php';
+
 final class Cloak
 {
     public string $url = '';
@@ -287,7 +289,7 @@ final class Cloak
         }
     }
 
-    public function logClick(bool $whiteShowed = false): void
+    public function logClick(bool $whiteShowed = false, string $hideclickAnswer = ''): void
     {
         $createdAt = date('Y-m-d H:i:s');
 
@@ -302,14 +304,15 @@ final class Cloak
         $ip = $this->getCurrentIp();
         $whiteShowed = (int)$whiteShowed;
         $stmt = Db::getConnection()->prepare("
-                INSERT INTO clicks (created_at, ban_reason, white_showed, user_agent, url, ip) 
-                VALUES (:created_at, :ban_reason, :white_showed, :user_agent, :url, :ip)");
+                INSERT INTO clicks (created_at, ban_reason, white_showed, user_agent, url, ip, hideclick_answer) 
+                VALUES (:created_at, :ban_reason, :white_showed, :user_agent, :url, :ip, :hideclick_answer)");
         $stmt->bindParam(':created_at', $createdAt);
         $stmt->bindParam(':ban_reason', $banReason);
         $stmt->bindParam(':white_showed', $whiteShowed);
         $stmt->bindParam(':user_agent', $userAgent);
         $stmt->bindParam(':url', $url);
         $stmt->bindParam(':ip', $ip);
+        $stmt->bindParam(':hideclick_answer', $hideclickAnswer);
 
         $stmt->execute();
     }
