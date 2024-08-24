@@ -18,7 +18,7 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->request = new Request();
+        $this->request = Application::$app->request;
     }
 
     public function render(string $view, array $params = [])

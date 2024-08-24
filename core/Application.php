@@ -5,26 +5,26 @@ namespace core;
 class Application
 {
     public static $appPath = __DIR__;
-
-    /**
-     * @var Router
-     */
-    public $router;
+    public static AppConfig $app;
 
     public function __construct()
     {
-        $this->router = new Router();
+        self::$app = new AppConfig(
+            new Router(),
+            new ErrorHandler(),
+            new Request(),
+        );
     }
 
     /**
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         try {
-            echo $this->router->resolve();
+            echo self::$app->router->resolve();
         } catch (\Throwable $e) {
-            echo (new ErrorHandler($e))->handle();
+            echo Application::$app->errorHandler->handle($e);
         }
     }
 }
