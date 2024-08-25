@@ -8,6 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'src\\' => array($baseDir . '/src'),
     'core\\' => array($baseDir . '/core'),
-    'NilPortugues\\Sql\\QueryFormatter\\' => array($vendorDir . '/nilportugues/sql-query-formatter/src'),
-    'NilPortugues\\Sql\\QueryBuilder\\' => array($vendorDir . '/nilportugues/sql-query-builder/src'),
 );

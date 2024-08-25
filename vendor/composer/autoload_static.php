@@ -15,11 +15,6 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         array (
             'core\\' => 5,
         ),
-        'N' => 
-        array (
-            'NilPortugues\\Sql\\QueryFormatter\\' => 32,
-            'NilPortugues\\Sql\\QueryBuilder\\' => 30,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -30,14 +25,6 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         'core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
-        ),
-        'NilPortugues\\Sql\\QueryFormatter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nilportugues/sql-query-formatter/src',
-        ),
-        'NilPortugues\\Sql\\QueryBuilder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nilportugues/sql-query-builder/src',
         ),
     );
 
