@@ -17,6 +17,8 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         ),
         'Y' => 
         array (
+            'Yiisoft\\Json\\' => 13,
+            'Yiisoft\\Db\\Sqlite\\' => 18,
             'Yiisoft\\Db\\' => 11,
         ),
         'P' => 
@@ -34,6 +36,14 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         'core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
+        ),
+        'Yiisoft\\Json\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/json/src',
+        ),
+        'Yiisoft\\Db\\Sqlite\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/db-sqlite/src',
         ),
         'Yiisoft\\Db\\' => 
         array (
