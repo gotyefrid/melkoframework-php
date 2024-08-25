@@ -8,10 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'src\\' => array($baseDir . '/src'),
     'core\\' => array($baseDir . '/core'),
-    'Yiisoft\\Json\\' => array($vendorDir . '/yiisoft/json/src'),
-    'Yiisoft\\Db\\Sqlite\\' => array($vendorDir . '/yiisoft/db-sqlite/src'),
-    'Yiisoft\\Db\\' => array($vendorDir . '/yiisoft/db/src'),
-    'Yiisoft\\Cache\\' => array($vendorDir . '/yiisoft/cache/src'),
-    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
 );
