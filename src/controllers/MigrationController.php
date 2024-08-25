@@ -8,18 +8,19 @@ use src\models\User;
 
 class MigrationController extends Controller
 {
-    public function actionMigrate()
+    public function actionMigrate(): void
     {
+        $this->initUserTable();
         $this->initClicksTable();
         $this->addColumnToClicksTable();
     }
 
-    public function actionCreateUser()
+    public function actionCreateUser(): void
     {
         $this->createUser();
     }
 
-    private function initClicksTable()
+    private function initClicksTable(): void
     {
         Db::getConnection()->exec("CREATE TABLE IF NOT EXISTS clicks (
             id INTEGER PRIMARY KEY,
@@ -32,7 +33,7 @@ class MigrationController extends Controller
         )");
     }
 
-    private function addColumnToClicksTable()
+    private function addColumnToClicksTable(): void
     {
         $db = Db::getConnection();
 
@@ -57,12 +58,21 @@ class MigrationController extends Controller
         echo 'Колонка hideclick_answer в таблице clicks уже существует <br>';
     }
 
-    private function createUser()
+    private function createUser(): void
     {
         $user = new User();
         $user->username = 'user' . random_int(1, 999999);
         $user->password = password_hash('admin', PASSWORD_DEFAULT);
         $user->save();
         echo "Юзер создан: Логин $user->username пароль admin <br>";
+    }
+
+    private function initUserTable(): void
+    {
+        Db::getConnection()->exec("CREATE TABLE IF NOT EXISTS users (
+                id INTEGER PRIMARY KEY,
+                username TEXT,
+                password TEXT
+        )");
     }
 }
