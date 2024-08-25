@@ -8,4 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'src\\' => array($baseDir . '/src'),
     'core\\' => array($baseDir . '/core'),
+    'Yiisoft\\Db\\' => array($vendorDir . '/yiisoft/db/src'),
+    'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
 );

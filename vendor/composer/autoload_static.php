@@ -15,6 +15,15 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         array (
             'core\\' => 5,
         ),
+        'Y' => 
+        array (
+            'Yiisoft\\Db\\' => 11,
+        ),
+        'P' => 
+        array (
+            'Psr\\SimpleCache\\' => 16,
+            'Psr\\Log\\' => 8,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -25,6 +34,18 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         'core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/core',
+        ),
+        'Yiisoft\\Db\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/db/src',
+        ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
         ),
     );
 
