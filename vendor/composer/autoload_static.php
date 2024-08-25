@@ -20,6 +20,7 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
             'Yiisoft\\Json\\' => 13,
             'Yiisoft\\Db\\Sqlite\\' => 18,
             'Yiisoft\\Db\\' => 11,
+            'Yiisoft\\Cache\\' => 14,
         ),
         'P' => 
         array (
@@ -48,6 +49,10 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
         'Yiisoft\\Db\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/db/src',
+        ),
+        'Yiisoft\\Cache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yiisoft/cache/src',
         ),
         'Psr\\SimpleCache\\' => 
         array (

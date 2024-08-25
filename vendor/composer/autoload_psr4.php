@@ -11,6 +11,7 @@ return array(
     'Yiisoft\\Json\\' => array($vendorDir . '/yiisoft/json/src'),
     'Yiisoft\\Db\\Sqlite\\' => array($vendorDir . '/yiisoft/db-sqlite/src'),
     'Yiisoft\\Db\\' => array($vendorDir . '/yiisoft/db/src'),
+    'Yiisoft\\Cache\\' => array($vendorDir . '/yiisoft/cache/src'),
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
 );
