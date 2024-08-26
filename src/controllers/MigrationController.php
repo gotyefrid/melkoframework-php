@@ -12,7 +12,6 @@ class MigrationController extends Controller
     {
         $this->initUserTable();
         $this->initClicksTable();
-        $this->addColumnToClicksTable();
     }
 
     public function actionCreateUser(): void
@@ -45,31 +44,6 @@ class MigrationController extends Controller
             echo "Таблица clicks создана <br>";
         }
 
-    }
-
-    private function addColumnToClicksTable(): void
-    {
-        $db = Application::$app->db;
-
-        // Проверяем, существует ли колонка hideclick_answer в таблице clicks
-        $result = $db->query("PRAGMA table_info(clicks)");
-        $columnExists = false;
-
-        while ($row = $result->fetch()) {
-            if ($row['name'] === 'hideclick_answer') {
-                $columnExists = true;
-                break;
-            }
-        }
-
-        // Если колонки не существует, добавляем её
-        if (!$columnExists) {
-            $db->exec("ALTER TABLE clicks ADD COLUMN hideclick_answer TEXT");
-            echo 'Добавили колонку hideclick_answer в таблицу clicks <br>';
-            return;
-        }
-
-        echo 'Колонка hideclick_answer в таблице clicks уже существует <br>';
     }
 
     private function createUser(): void
