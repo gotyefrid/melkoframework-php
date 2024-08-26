@@ -19,7 +19,7 @@ use core\FlashMessageWidget;
 </head>
 <body>
 <?php require('main-nav.php') ?>
-<div class="container">
+<div class="container mt-3">
     <?= FlashMessageWidget::showFlashIfExist() ?>
     <?= $content ?>
 </div>
