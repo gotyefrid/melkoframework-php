@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace src\controllers;
 
@@ -17,6 +17,11 @@ class UserController extends Controller
         $this->checkAuth();
     }
 
+    /**
+     * @return string
+     * @throws NotFoundException
+     * @throws \Throwable
+     */
     public function actionIndex(): string
     {
         $users = User::find('SELECT * FROM users');
@@ -25,8 +30,8 @@ class UserController extends Controller
     }
 
     /**
-     * @return mixed
      * @throws NotFoundException
+     * @throws \Throwable
      */
     public function actionCreate()
     {
@@ -44,6 +49,12 @@ class UserController extends Controller
         return $this->render('create', ['model' => $user, 'errors' => $user->errors]);
     }
 
+    /**
+     * @return int|string
+     * @throws BadRequestException
+     * @throws NotFoundException
+     * @throws \Throwable
+     */
     public function actionUpdate()
     {
         $id = $_GET['id'] ? (int)$_GET['id'] : null;
@@ -51,7 +62,8 @@ class UserController extends Controller
         if (!$id) {
             throw new BadRequestException('Не передан id');
         }
-        
+
+        /** @var User $user */
         $user = User::findById($id);
 
         if (!$user) {
@@ -70,7 +82,11 @@ class UserController extends Controller
         return $this->render('update', ['model' => $user, 'errors' => $user->errors]);
     }
 
-    public function actionDelete()
+    /**
+     * @throws NotFoundException
+     * @throws BadRequestException
+     */
+    public function actionDelete(): int
     {
         $id = $_GET['id'] ? (int)$_GET['id'] : null;
 

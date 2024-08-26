@@ -21,7 +21,11 @@ abstract class Controller
         $this->request = Application::$app->request;
     }
 
-    public function render(string $view, array $params = [])
+    /**
+     * @throws NotFoundException
+     * @throws \Throwable
+     */
+    public function render(string $view, array $params = []): string
     {
         $path = __DIR__ . '/../src/views/' . $this->request->getController() . '/' . $view . '.php';
 
