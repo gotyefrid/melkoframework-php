@@ -40,7 +40,8 @@ class Url
 
     public static function toRoute(string $path, array $params = []): string
     {
-        $params['path'] = $path;
+        $params = array_merge(['path' => $path], $params);
+
         $baseUrl = self::getCurrentUrl(false);
 
         return $baseUrl . '?' . http_build_query($params);
