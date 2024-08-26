@@ -5,6 +5,7 @@ namespace src\controllers;
 use core\Controller;
 use core\exceptions\BadRequestException;
 use core\exceptions\NotFoundException;
+use core\FlashMessageWidget;
 use src\models\User;
 
 class UserController extends Controller
@@ -42,6 +43,7 @@ class UserController extends Controller
             $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             if ($user->validate() && $user->save()) {
+                FlashMessageWidget::setFlash('success', 'Успешно создано');
                 return $this->redirect('user/index');
             }
         }
@@ -75,6 +77,7 @@ class UserController extends Controller
             $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             if ($user->validate() && $user->save()) {
+                FlashMessageWidget::setFlash('primary', 'Успешно обновлено');
                 return $this->redirect('user/index');
             }
         }
@@ -83,7 +86,6 @@ class UserController extends Controller
     }
 
     /**
-     * @throws NotFoundException
      * @throws BadRequestException
      */
     public function actionDelete(): int
@@ -97,10 +99,12 @@ class UserController extends Controller
         $user = User::findById($id);
 
         if (!$user) {
-            throw new NotFoundException('Не найден пользователь');
+            FlashMessageWidget::setFlash('danger', 'Не найден пользователь');
+            return $this->redirect('user/index');
         }
 
         $user->delete();
+        FlashMessageWidget::setFlash('success', 'Успешно удалено');
 
         return $this->redirect('user/index');
     }
