@@ -4,7 +4,7 @@ namespace core\helpers;
 
 class Renderer
 {
-    public static function render(string $absoluteFilePath, array $params = [])
+    public static function render(string $absoluteFilePath, array $params = []): string
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();

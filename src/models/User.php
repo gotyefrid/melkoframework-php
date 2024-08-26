@@ -39,7 +39,7 @@ class User extends Model
      */
     public static function findByUsername(string $username): ?User
     {
-        return User::findByCondition('username', $username)[0] ?? null;
+        return static::findByCondition('username', $username)[0] ?? null;
     }
 
     public function validate(): bool
@@ -49,7 +49,8 @@ class User extends Model
         }
 
         if ($this->id) {
-            $exists = User::find('SELECT * FROM users WHERE username = :name AND id = :id', [
+            // Редактирование
+            $exists = static::find('SELECT * FROM users WHERE username = :name AND id != :id', [
                 'name' => $this->username,
                 'id' => $this->id
             ]);
