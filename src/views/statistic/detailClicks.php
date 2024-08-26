@@ -7,10 +7,42 @@ use src\models\Click;
 /** @var Click[] $clicks */
 /** @var string $fromDate */
 /** @var string $toDate */
+/** @var string $page */
 
 $grid = new GridView($clicks);
-$grid->setPagination(true, 20); // Включить пагинацию, по 5 элементов на страницу
-$grid->setCurrentPage($_GET['page'] ?? 1); // Установить текущую страницу
+$grid->setColumns([
+    [
+        'attribute' => 'id',
+    ],
+    [
+        'attribute' => 'created_at',
+        'value' => function (Click $model) {
+            $dateTime = new DateTime($model->created_at);
+            $dateTime->setTimezone(new DateTimeZone('+3'));
+            return $dateTime->format('Y-m-d H:i:s');
+        }
+    ],
+    [
+        'attribute' => 'ban_reason',
+    ],
+    [
+        'attribute' => 'white_showed',
+    ],
+    [
+        'attribute' => 'user_agent',
+    ],
+    [
+        'attribute' => 'url',
+    ],
+    [
+        'attribute' => 'ip',
+    ],
+    [
+        'attribute' => 'hideclick_answer',
+    ],
+]);
+$grid->setPagination(true, 20);
+$grid->setCurrentPage($page);
 
 ?>
 

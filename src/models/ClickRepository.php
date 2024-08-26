@@ -2,29 +2,35 @@
 
 namespace src\models;
 
-use DateTime;
-use DateTimeZone;
-use PDO;
+use core\Application;
 
 class ClickRepository
 {
+    /**
+     * @noinspection PhpUnhandledExceptionInspection
+     * @noinspection PhpSameParameterValueInspection
+     */
     private static function convertToUTC(string $dateTime, string $timezone = 'Europe/Moscow'): string
     {
-        $date = new DateTime($dateTime, new DateTimeZone($timezone));
-        $date->setTimezone(new DateTimeZone('UTC'));
+        $date = new \DateTime($dateTime, new \DateTimeZone($timezone));
+        $date->setTimezone(new \DateTimeZone('UTC'));
         return $date->format('Y-m-d H:i:s');
     }
 
+    /**
+     * @noinspection PhpUnhandledExceptionInspection
+     * @noinspection PhpSameParameterValueInspection
+     */
     private static function convertFromUTC(string $dateTime, string $timezone = 'Europe/Moscow'): string
     {
-        $date = new DateTime($dateTime, new DateTimeZone('UTC'));
-        $date->setTimezone(new DateTimeZone($timezone));
+        $date = new \DateTime($dateTime, new \DateTimeZone('UTC'));
+        $date->setTimezone(new \DateTimeZone($timezone));
         return $date->format('Y-m-d H:i:s');
     }
 
     public static function getTotalClicks(string $fromDate, string $toDate): int
     {
-        $db = \core\Db::getConnection();
+        $db = Application::$app->db;
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
@@ -37,7 +43,7 @@ class ClickRepository
 
     public static function getHideClickCount(string $fromDate, string $toDate): int
     {
-        $db = \core\Db::getConnection();
+        $db = Application::$app->db;
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
@@ -50,7 +56,7 @@ class ClickRepository
 
     public static function getCustomCloakCount(string $fromDate, string $toDate): int
     {
-        $db = \core\Db::getConnection();
+        $db = Application::$app->db;
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
@@ -63,7 +69,7 @@ class ClickRepository
 
     public static function getGoesToBlackCount(string $fromDate, string $toDate): int
     {
-        $db = \core\Db::getConnection();
+        $db = Application::$app->db;
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
@@ -76,7 +82,7 @@ class ClickRepository
 
     public static function getCustomCloakReasons(string $fromDate, string $toDate): array
     {
-        $db = \core\Db::getConnection();
+        $db = Application::$app->db;
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
@@ -90,7 +96,7 @@ class ClickRepository
         $stmt->bindParam(':from_date', $fromDateUTC);
         $stmt->bindParam(':to_date', $toDateUTC);
         $stmt->execute();
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $data[] = [
             'ban_reason' => '______',

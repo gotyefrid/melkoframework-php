@@ -1,10 +1,10 @@
-<?php
+<?php /** @noinspection PhpUnused */
 
 namespace src\controllers;
 
 use core\Application;
 use core\Controller;
-use core\Db;
+use core\exceptions\NotFoundException;
 use src\models\Click;
 use src\models\ClickRepository;
 
@@ -20,12 +20,15 @@ class StatisticController extends Controller
         $this->checkAuth();
     }
 
+    /**
+     * @throws NotFoundException
+     */
     public function actionIndex()
     {
         $fromDate = ($_GET['from_date'] ?? date('Y-m-d')) ?: '2000-01-01';
         $toDate = ($_GET['to_date'] ?? date('Y-m-d')) ?: '2999-01-01';
         $isCloEnabled = $this->isCloEnabled();
-// Получение статистики
+        // Получение статистики
         $totalClicks = ClickRepository::getTotalClicks($fromDate, $toDate);
         $hideClickCount = ClickRepository::getHideClickCount($fromDate, $toDate);
         $customCloakCount = ClickRepository::getCustomCloakCount($fromDate, $toDate);
@@ -50,34 +53,42 @@ class StatisticController extends Controller
         ]);
     }
 
+    /**
+     * @throws NotFoundException
+     */
     public function actionDetailClicks()
     {
         $filter = $_GET['type'] ?? '';
         $fromDate = ($_GET['from_date'] ?? date('Y-m-d')) ?: '2000-01-01';
         $toDate = ($_GET['to_date'] ?? date('Y-m-d')) ?: '2999-01-01';
 
-        $createdAtWhere = "created_at > '$fromDate 00:00:00' AND created_at < '$toDate 23:59:59'";
-
         switch ($filter) {
             case 'hideClickCount':
-                $where = "WHERE ban_reason = 'hideclick' AND $createdAtWhere";
+                $where = "WHERE ban_reason = 'hideclick'";
                 break;
             case 'customCloakCount':
-                $where = "WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick' AND $createdAtWhere";
+                $where = "WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick'";
                 break;
             case 'goesToBlack':
-                $where = "WHERE white_showed = 0 AND $createdAtWhere";
+                $where = "WHERE white_showed = 0";
                 break;
             default:
-                $where = $fromDate || $toDate ? "WHERE $createdAtWhere" : [];
+                $where = "WHERE";
         }
 
-        $clicks = Click::findAll($where . ' ORDER BY created_at DESC');
+        $timeCondition = " created_at > :fromDate AND created_at < :toDate ";
+        $clicks = Click::find(
+            "SELECT * FROM clicks " . $where . $timeCondition . ' ORDER BY created_at DESC',
+            [
+                ':fromDate' => $fromDate . ' 00:00:00',
+                ':toDate' => $toDate . ' 23:59:59',
+            ]);
 
         return $this->render('detailClicks', [
             'clicks' => $clicks,
             'fromDate' => $fromDate,
             'toDate' => $toDate,
+            'page' => $_GET['page'] ?? 1,
         ]);
     }
 
@@ -99,42 +110,5 @@ class StatisticController extends Controller
         $fileContents = file_get_contents(self::$hideClickPath);
 
         return strpos($fileContents, '$statusClo = \'on\';') !== false;
-    }
-
-    public function insertRandomClicks(int $count = 100): void
-    {
-        $banReasons = ['hideclick', 'Reason1', 'Reason2', 'Reason3', null];
-        $userAgents = [
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1',
-            'Mozilla/5.0 (Linux; Android 11; SM-G998U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Mobile Safari/537.36',
-        ];
-        $urls = [
-            'https://example.com',
-            'https://testsite.com',
-            'https://randomsite.org',
-            'https://mywebsite.net'
-        ];
-
-        for ($i = 0; $i < $count; $i++) {
-            $createdAt = date('Y-m-d H:i:s', strtotime('-' . rand(0, 30) . ' days'));
-            $banReason = $banReasons[array_rand($banReasons)];
-            $whiteShowed = $banReason === null ? 0 : 1;
-            $userAgent = $userAgents[array_rand($userAgents)];
-            $url = $urls[array_rand($urls)];
-            $ip = long2ip(rand(0, 4294967295)); // Генерация случайного IP-адреса
-
-            $stmt = Db::getConnection()->prepare("INSERT INTO clicks (created_at, ban_reason, white_showed, user_agent, url, ip) 
-                                    VALUES (:created_at, :ban_reason, :white_showed, :user_agent, :url, :ip)");
-            $stmt->bindParam(':created_at', $createdAt);
-            $stmt->bindParam(':ban_reason', $banReason);
-            $stmt->bindParam(':white_showed', $whiteShowed);
-            $stmt->bindParam(':user_agent', $userAgent);
-            $stmt->bindParam(':url', $url);
-            $stmt->bindParam(':ip', $ip);
-
-            $stmt->execute();
-        }
     }
 }
