@@ -5,7 +5,16 @@ namespace core;
 class Application
 {
     public static $appPath = __DIR__;
-    public static AppConfig $app;
+
+    /**
+     * @var AppConfig
+     */
+    public static $app;
+
+    /**
+     * @var string
+     */
+    public static $dbPath = __DIR__ . '/../databases/database.db';
 
     public function __construct()
     {
@@ -13,6 +22,7 @@ class Application
             new Router(),
             new ErrorHandler(),
             new Request(),
+            new \PDO('sqlite:' . self::$dbPath)
         );
     }
 

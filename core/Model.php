@@ -22,75 +22,39 @@ abstract class Model implements \ArrayAccess
 
     abstract public static function tableName(): string;
 
-    /**
-     * @param $conditions
-     *
-     * @return array|string
-     */
-    public static function findAll($conditions = []): array
-    {
-        $sql = 'SELECT * FROM ' . static::tableName();
-
-        $params = [];
-        if (!empty($conditions)) {
-            if (is_array($conditions)) {
-                $conditionsArray = [];
-
-                foreach ($conditions as $column => $value) {
-                    $conditionsArray[] = "$column = :$column";
-                    $params[":$column"] = $value;
-                }
-                $sql .= ' WHERE ' . implode(' AND ', $conditionsArray);
-            } else {
-                $sql .= ' ' . $conditions;
-            }
-        }
-
-        $stmt = Db::getConnection()->prepare($sql);
-        $stmt->execute(is_array($conditions) ? $params : null);
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $res = [];
-
-        foreach ($results as $result) {
-            $model = new static();
-
-            foreach ($result as $column => $value) {
-                $model->{$column} = $value;
-            }
-
-            $res[] = $model;
-        }
-
-        return $res;
-    }
-
-    /**
-     * @param string|array $conditions
-     *
-     * @return Model|null
-     */
-    public static function findOne($conditions = []): ?Model
-    {
-        return self::findAll($conditions)[0] ?? null;
-    }
-
     public static function findById(int $id): ?Model
     {
-        return self::findAll(['id' => $id])[0] ?? null;
+        $sql = 'SELECT * FROM users WHERE id = :id LIMIT 1';
+        return self::find($sql, [':id' => $id])[0] ?? null;
+    }
+
+    /**
+     * @param string $column
+     * @param $value
+     *
+     * @return Model[]
+     */
+    public static function findByCondition(string $column, $value): array
+    {
+        $sql = "SELECT * FROM users WHERE $column = :$column";
+        return self::find($sql, [":$column" => $value]);
     }
 
 
     public function delete(): bool
     {
         $sql = 'DELETE FROM ' . static::tableName() . ' WHERE id = :id';
-        $stmt = Db::getConnection()->prepare($sql);
+        $stmt = Application::$app->db->prepare($sql);
 
         return $stmt->execute([':id' => $this->id]);
     }
 
-    public function save(): bool
+    public function save(bool $runValidation = true): bool
     {
+        if ($runValidation && !$this->validate()) {
+            return false;
+        }
+
         $properties = get_object_vars($this);
         $properties = array_intersect_key($properties, array_flip($this->attributes));
 
@@ -118,7 +82,7 @@ abstract class Model implements \ArrayAccess
             $sql = 'INSERT INTO ' . static::tableName() . " ($columnsList) VALUES ($placeholders)";
         }
 
-        $stmt = Db::getConnection()->prepare($sql);
+        $stmt = Application::$app->db->prepare($sql);
 
         // Привязка значений к подготовленному запросу
         foreach ($properties as $column => $value) {
@@ -127,12 +91,33 @@ abstract class Model implements \ArrayAccess
 
         if ($stmt->execute()) {
             if (!isset($properties['id']) || !$properties['id']) {
-                $this->id = Db::getConnection()->lastInsertId(); // Присваивание ID, если это было создание новой записи
+                $this->id = Application::$app->db->lastInsertId(); // Присваивание ID, если это было создание новой записи
             }
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param string $sql
+     * @param array $params
+     *
+     * @return Model[]
+     */
+    public static function find(string $sql, array $params = []): array
+    {
+        $stmt = Application::$app->db->prepare($sql);
+
+        if ($params) {
+            // Привязка значений к подготовленному запросу
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+        }
+
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
     abstract public function validate(): bool;
@@ -144,8 +129,8 @@ abstract class Model implements \ArrayAccess
 
     public function offsetGet($offset)
     {
-        if (method_exists($this, 'get'. ucfirst($offset))) {
-            $data = $this->{'get'. ucfirst($offset)}();
+        if (method_exists($this, 'get' . ucfirst($offset))) {
+            $data = $this->{'get' . ucfirst($offset)}();
         } else {
             $data = $this->{$offset};
         }

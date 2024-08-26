@@ -17,13 +17,17 @@ class UserController extends Controller
         $this->checkAuth();
     }
 
-    public function actionIndex()
+    public function actionIndex(): string
     {
-        $users = User::findAll();
+        $users = User::find('SELECT * FROM users');
 
         return $this->render('index', ['users' => $users]);
     }
 
+    /**
+     * @return mixed
+     * @throws NotFoundException
+     */
     public function actionCreate()
     {
         $user = new User();
