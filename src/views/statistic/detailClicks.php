@@ -13,6 +13,7 @@ $grid = new GridView($clicks);
 $grid->setColumns([
     [
         'attribute' => 'id',
+        'label' => 'ID'
     ],
     [
         'attribute' => 'created_at',
@@ -20,25 +21,35 @@ $grid->setColumns([
             $dateTime = new DateTime($model->created_at);
             $dateTime->setTimezone(new DateTimeZone('+3'));
             return $dateTime->format('Y-m-d H:i:s');
-        }
+        },
+        'label' => 'Время клика (МСК)'
     ],
     [
         'attribute' => 'ban_reason',
+        'label' => 'Причина бана'
     ],
     [
         'attribute' => 'white_showed',
+        'label' => 'Показан вайт',
+        'value' => function (Click $model) {
+            return $model->white_showed ? 'Да' : 'Нет';
+        }
     ],
     [
         'attribute' => 'user_agent',
+        'label' => 'User Agent'
     ],
     [
         'attribute' => 'url',
+        'label' => 'URL'
     ],
     [
         'attribute' => 'ip',
+        'label' => 'IP'
     ],
     [
         'attribute' => 'hideclick_answer',
+        'label' => 'Ответ hideclick'
     ],
 ]);
 $grid->setPagination(true, 20);
