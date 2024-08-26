@@ -3,6 +3,8 @@
 /** @var string $content */
 /** @var string $title */
 
+use core\FlashMessageWidget;
+
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +20,7 @@
 <body>
 <?php require('main-nav.php') ?>
 <div class="container">
+    <?= FlashMessageWidget::showFlashIfExist() ?>
     <?= $content ?>
 </div>
 <script src="/src/views/layouts/js/bootstrap.bundle.js"></script>
