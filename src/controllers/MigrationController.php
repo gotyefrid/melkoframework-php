@@ -74,11 +74,18 @@ class MigrationController extends Controller
 
     private function initUserTable(): void
     {
-        Application::$app->db->exec("CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY,
-                username TEXT,
-                password TEXT
-        )");
+        $result = Application::$app->db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users';");
+
+        if ($result->fetch()) {
+            echo "Таблица users уже существует <br>";
+        } else {
+            Application::$app->db->exec("CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY,
+                    username TEXT,
+                    password TEXT
+                )");
+            echo "Таблица users создана <br>";
+        }
     }
 
     /**
