@@ -21,9 +21,11 @@ class StatisticController extends Controller
     }
 
     /**
+     * @return string
      * @throws NotFoundException
+     * @throws \Throwable
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $fromDate = ($_GET['from_date'] ?? date('Y-m-d')) ?: '2000-01-01';
         $toDate = ($_GET['to_date'] ?? date('Y-m-d')) ?: '2999-01-01';
@@ -54,9 +56,11 @@ class StatisticController extends Controller
     }
 
     /**
+     * @return string
      * @throws NotFoundException
+     * @throws \Throwable
      */
-    public function actionDetailClicks()
+    public function actionDetailClicks(): string
     {
         $filter = $_GET['type'] ?? '';
         $fromDate = ($_GET['from_date'] ?? date('Y-m-d')) ?: '2000-01-01';
