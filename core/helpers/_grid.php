@@ -46,11 +46,11 @@ $isContainsActions = !empty(array_filter($columns, function ($column) {
 
 if ($isContainsActions) : ?>
     <!-- Modal -->
-    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel' . $id . '" aria-hidden="true">
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmLabel' . $id . '">Подтверждение удаления</h5>
+                    <h5 class="modal-title" id="deleteConfirmLabel">Подтверждение удаления</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
