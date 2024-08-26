@@ -27,15 +27,24 @@ class MigrationController extends Controller
 
     private function initClicksTable(): void
     {
-        Application::$app->db->exec("CREATE TABLE IF NOT EXISTS clicks (
-            id INTEGER PRIMARY KEY,
-            created_at TEXT,
-            ban_reason TEXT,
-            white_showed INTEGER,
-            user_agent TEXT,
-            url TEXT,
-            ip TEXT
-        )");
+        $result = Application::$app->db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='clicks';");
+
+        if ($result->fetch()) {
+            echo "Таблица clicks уже существует <br>";
+        } else {
+            Application::$app->db->exec("CREATE TABLE IF NOT EXISTS clicks (
+                id INTEGER PRIMARY KEY,
+                created_at TEXT,
+                ban_reason TEXT,
+                white_showed INTEGER,
+                user_agent TEXT,
+                url TEXT,
+                ip TEXT,
+                hideclick_answer TEXT
+            )");
+            echo "Таблица clicks создана <br>";
+        }
+
     }
 
     private function addColumnToClicksTable(): void
