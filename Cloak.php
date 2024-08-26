@@ -3,6 +3,7 @@
 use core\Application;
 
 require __DIR__ . '/vendor/autoload.php';
+new Application();
 
 final class Cloak
 {
