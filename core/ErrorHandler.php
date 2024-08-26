@@ -8,28 +8,18 @@ use Throwable;
 
 class ErrorHandler
 {
-    /**
-     * @var Throwable
-     */
-    public $exception;
-
-    public function __construct(Throwable $throwable)
+    public function handle(Throwable $throwable)
     {
-        $this->exception = $throwable;
-    }
-
-    public function handle()
-    {
-        if ($this->exception instanceof HttpErrorInterface) {
-            return $this->exception->getErrorHtml();
+        if ($throwable instanceof HttpErrorInterface) {
+            return $throwable->getErrorHtml();
         }
 
-        if ($this->exception instanceof JsonErrorInterface) {
-            return $this->exception->getErrorJson();
+        if ($throwable instanceof JsonErrorInterface) {
+            return $throwable->getErrorJson();
         }
 
-        $text = 'Вызвано исключение: ' . get_class($this->exception);
-        $text .= '<br>' . $this->exception->getMessage();
+        $text = 'Вызвано исключение: ' . get_class($throwable);
+        $text .= '<br>' . $throwable->getMessage();
 
         return $text;
     }

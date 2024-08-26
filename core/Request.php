@@ -4,9 +4,16 @@ namespace core;
 
 class Request
 {
+    private $path;
+
+    public function __construct()
+    {
+        $this->path = isset($_GET['path']) ? $_GET['path'] : Router::DEFAULT_ROUTE;
+    }
+
     public function getPath(): string
     {
-        return $_GET['path'] ?? Router::DEFAULT_ROUTE;
+        return $this->path;
     }
 
     public function getAction()
@@ -27,5 +34,10 @@ class Request
     public function isPost(): bool
     {
         return $_SERVER['REQUEST_METHOD'] == 'POST';
+    }
+
+    public function setRoute(string $path)
+    {
+        $this->path = $path;
     }
 }

@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'mel/custom-cloak',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'name' => 'gotyefrid/melkoframework-php',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'ee9c50ab4da7a06a6b39f47e62ccb8d00dbdeb5e',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'mel/custom-cloak' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+        'gotyefrid/melkoframework-php' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'ee9c50ab4da7a06a6b39f47e62ccb8d00dbdeb5e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

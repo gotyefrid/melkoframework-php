@@ -7,24 +7,34 @@ class Application
     public static $appPath = __DIR__;
 
     /**
-     * @var Router
+     * @var AppConfig
      */
-    public $router;
+    public static $app;
+
+    /**
+     * @var string
+     */
+    public static $dbPath = __DIR__ . '/../databases/database.db';
 
     public function __construct()
     {
-        $this->router = new Router();
+        self::$app = new AppConfig(
+            new Router(),
+            new ErrorHandler(),
+            new Request(),
+            new \PDO('sqlite:' . self::$dbPath)
+        );
     }
 
     /**
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         try {
-            echo $this->router->resolve();
+            echo self::$app->router->resolve();
         } catch (\Throwable $e) {
-            echo (new ErrorHandler($e))->handle();
+            echo Application::$app->errorHandler->handle($e);
         }
     }
 }

@@ -2,9 +2,7 @@
 
 namespace src\models;
 
-use core\Db;
 use core\Model;
-use PDO;
 
 class User extends Model
 {
@@ -34,9 +32,14 @@ class User extends Model
         return 'users';
     }
 
-    public static function findByUsername(string $username)
+    /**
+     * @param string $username
+     *
+     * @return User|null
+     */
+    public static function findByUsername(string $username): ?User
     {
-        return self::findOne(['username' => $username]);
+        return User::findByCondition('username', $username)[0] ?? null;
     }
 
     public function validate(): bool
@@ -46,16 +49,16 @@ class User extends Model
         }
 
         if ($this->id) {
-            $sql = 'SELECT * FROM users WHERE username = :username AND id <> :id LIMIT 1';
-            $stmt = Db::getConnection()->prepare($sql);
-            $stmt->execute([':username' => $this->username, ':id' => $this->id]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $exists = User::find('SELECT * FROM users WHERE username = :name AND id = :id', [
+                'name' => $this->username,
+                'id' => $this->id
+            ]);
 
-            if ($results) {
+            if ($exists) {
                 $this->errors['username'] = 'Такой пользователь уже существует';
             }
         } else {
-            if (self::findOne(['username' => $this->username])) {
+            if (self::findByUsername($this->username)) {
                 $this->errors['username'] = 'Такой пользователь уже существует';
             }
         }
@@ -65,5 +68,16 @@ class User extends Model
         }
 
         return empty($this->errors);
+    }
+
+    /**
+     * @param string $sql
+     * @param array $params
+     *
+     * @return User[]
+     */
+    public static function find(string $sql, array $params = []): array
+    {
+        return parent::find($sql, $params);
     }
 }
