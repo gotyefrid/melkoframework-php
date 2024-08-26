@@ -66,27 +66,29 @@ class StatisticController extends Controller
         $fromDate = ($_GET['from_date'] ?? date('Y-m-d')) ?: '2000-01-01';
         $toDate = ($_GET['to_date'] ?? date('Y-m-d')) ?: '2999-01-01';
 
+        $conditions = [];
+
         switch ($filter) {
             case 'hideClickCount':
-                $where = "WHERE ban_reason = 'hideclick'";
+                $conditions[] = "ban_reason = 'hideclick'";
                 break;
             case 'customCloakCount':
-                $where = "WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick'";
+                $conditions[] = "ban_reason IS NOT NULL AND ban_reason != 'hideclick'";
                 break;
             case 'goesToBlack':
-                $where = "WHERE white_showed = 0";
+                $conditions[] = "white_showed = 0";
                 break;
             default:
-                $where = "WHERE";
+                break;
         }
 
-        $timeCondition = " created_at > :fromDate AND created_at < :toDate ";
-        $clicks = Click::find(
-            "SELECT * FROM clicks " . $where . $timeCondition . ' ORDER BY created_at DESC',
-            [
-                ':fromDate' => $fromDate . ' 00:00:00',
-                ':toDate' => $toDate . ' 23:59:59',
-            ]);
+        $conditions[] = "created_at > :fromDate AND created_at < :toDate";
+        $sql = "SELECT * FROM clicks WHERE " . implode(' AND ', $conditions) . " ORDER BY created_at DESC";
+
+        $clicks = Click::find($sql, [
+            ':fromDate' => $fromDate . ' 00:00:00',
+            ':toDate' => $toDate . ' 23:59:59',
+        ]);
 
         return $this->render('detailClicks', [
             'clicks' => $clicks,

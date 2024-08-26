@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnusedPrivateMethodInspection */
 
 namespace src\models;
 
@@ -35,22 +36,37 @@ class ClickRepository
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
         $stmt = $db->prepare("SELECT COUNT(*) FROM clicks WHERE created_at BETWEEN :from_date AND :to_date");
-        $stmt->bindParam(':from_date', $fromDateUTC);
-        $stmt->bindParam(':to_date', $toDateUTC);
-        $stmt->execute();
+        $stmt->execute([
+            ':from_date' => $fromDateUTC,
+            ':to_date' => $toDateUTC
+        ]);
         return (int)$stmt->fetchColumn();
     }
 
     public static function getHideClickCount(string $fromDate, string $toDate): int
     {
         $db = Application::$app->db;
+
         $fromDateUTC = self::convertToUTC($fromDate . ' 00:00:00');
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
-        $stmt = $db->prepare("SELECT COUNT(*) FROM clicks WHERE ban_reason = 'hideclick' AND created_at BETWEEN :from_date AND :to_date");
-        $stmt->bindParam(':from_date', $fromDateUTC);
-        $stmt->bindParam(':to_date', $toDateUTC);
-        $stmt->execute();
+        $sql = <<<SQL
+        SELECT COUNT(*) FROM clicks c1
+        WHERE c1.ban_reason = 'hideclick'
+        AND NOT EXISTS (
+            SELECT 1
+            FROM clicks c2
+            WHERE c2.ip = c1.ip
+            AND c2.white_showed = 0
+        )
+        AND c1.created_at BETWEEN :from_date AND :to_date
+        SQL;
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            ':from_date' => $fromDateUTC,
+            ':to_date' => $toDateUTC
+        ]);
         return (int)$stmt->fetchColumn();
     }
 
@@ -61,9 +77,10 @@ class ClickRepository
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
         $stmt = $db->prepare("SELECT COUNT(*) FROM clicks WHERE ban_reason IS NOT NULL AND ban_reason != 'hideclick' AND created_at BETWEEN :from_date AND :to_date");
-        $stmt->bindParam(':from_date', $fromDateUTC);
-        $stmt->bindParam(':to_date', $toDateUTC);
-        $stmt->execute();
+        $stmt->execute([
+            ':from_date' => $fromDateUTC,
+            ':to_date' => $toDateUTC
+        ]);
         return (int)$stmt->fetchColumn();
     }
 
@@ -74,9 +91,10 @@ class ClickRepository
         $toDateUTC = self::convertToUTC($toDate . ' 23:59:59');
 
         $stmt = $db->prepare("SELECT COUNT(*) FROM clicks WHERE white_showed = 0 AND created_at BETWEEN :from_date AND :to_date");
-        $stmt->bindParam(':from_date', $fromDateUTC);
-        $stmt->bindParam(':to_date', $toDateUTC);
-        $stmt->execute();
+        $stmt->execute([
+            ':from_date' => $fromDateUTC,
+            ':to_date' => $toDateUTC
+        ]);
         return (int)$stmt->fetchColumn();
     }
 
@@ -93,9 +111,10 @@ class ClickRepository
             AND created_at BETWEEN :from_date AND :to_date 
             GROUP BY ban_reason
         ");
-        $stmt->bindParam(':from_date', $fromDateUTC);
-        $stmt->bindParam(':to_date', $toDateUTC);
-        $stmt->execute();
+        $stmt->execute([
+            ':from_date' => $fromDateUTC,
+            ':to_date' => $toDateUTC
+        ]);
         $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $data[] = [
@@ -121,6 +140,8 @@ class ClickRepository
 
         $part = '%GSA/%';
         $stmt->bindParam(':user_agent_part', $part);
+        $stmt->bindParam(':from_date', $fromDateUTC);
+        $stmt->bindParam(':to_date', $toDateUTC);
         $stmt->execute();
         $data[] = [
             'ban_reason' => 'Google Search',
@@ -129,6 +150,8 @@ class ClickRepository
 
         $part = '%[FB_%';
         $stmt->bindParam(':user_agent_part', $part);
+        $stmt->bindParam(':from_date', $fromDateUTC);
+        $stmt->bindParam(':to_date', $toDateUTC);
         $stmt->execute();
         $data[] = [
             'ban_reason' => 'Facebook',
