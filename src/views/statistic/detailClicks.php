@@ -57,10 +57,13 @@ $grid->setCurrentPage($page);
 
 ?>
 
-<?= Renderer::render(__DIR__ . '/_filters.php', [
+<div class="container">
+    <?= Renderer::render(__DIR__ . '/_filters.php', [
         'fromDate' => $fromDate,
         'toDate' => $toDate,
-]) ?>
+    ]) ?>
+</div>
+
 <div class="container m-2">
     <?= $grid->render() ?>
 </div>
