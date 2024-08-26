@@ -77,7 +77,7 @@ class UserController extends Controller
             $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
             if ($user->validate() && $user->save()) {
-                FlashMessageWidget::setFlash('primary', 'Успешно обновлено');
+                FlashMessageWidget::setFlash('success', 'Успешно обновлено');
                 return $this->redirect('user/index');
             }
         }
