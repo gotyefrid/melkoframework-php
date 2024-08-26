@@ -10,16 +10,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="/src/views/layouts/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="/src/views/layouts/css/bootstrap-icons.css">
     <title><?= $title ?? 'Заголовок' ?></title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/src/views/layouts/js/jquery-3.7.1.js"></script>
 </head>
 <body>
 <?php require('main-nav.php') ?>
 <div class="container">
     <?= $content ?>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/src/views/layouts/js/bootstrap.bundle.js"></script>
 </body>
 </html>
