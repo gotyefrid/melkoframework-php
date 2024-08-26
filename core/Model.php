@@ -108,15 +108,7 @@ abstract class Model implements \ArrayAccess
     public static function find(string $sql, array $params = []): array
     {
         $stmt = Application::$app->db->prepare($sql);
-
-        if ($params) {
-            // Привязка значений к подготовленному запросу
-            foreach ($params as $key => $value) {
-                $stmt->bindValue($key, $value);
-            }
-        }
-
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
     }
 
