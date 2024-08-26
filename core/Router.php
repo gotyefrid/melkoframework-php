@@ -11,7 +11,7 @@ class Router
      */
     protected $routes = [];
 
-    public const DEFAULT_ROUTE = 'home/index';
+    public const DEFAULT_ROUTE = 'statistic/index';
 
     public function __construct()
     {

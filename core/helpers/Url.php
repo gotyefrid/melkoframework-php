@@ -2,6 +2,8 @@
 
 namespace core\helpers;
 
+use core\Application;
+
 class Url
 {
     public static function getDomain(bool $withProtocol = true): string
@@ -54,7 +56,7 @@ class Url
 
     public static function currentRoute(): string
     {
-        return $_GET['path'] ?? '';
+        return $_GET['path'] ?? Application::$app->router::DEFAULT_ROUTE;
     }
 
     public static function currentAction(): string
