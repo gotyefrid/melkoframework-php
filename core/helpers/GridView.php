@@ -12,11 +12,6 @@ class GridView
     private $currentPage = 1;
     private $itemsPerPage = 10;
 
-    /**
-     * @var array
-     */
-    private $actionColumns = [];
-
     public function __construct(array $data = [])
     {
         $this->dataProvider = $data;
@@ -37,7 +32,7 @@ class GridView
         return $this;
     }
 
-    public function render()
+    public function render(): string
     {
         if (!$this->dataProvider) {
             return 'Нет записей';
@@ -69,37 +64,37 @@ class GridView
     {
         if ($this->columns) {
             return $this->columns;
-        } else {
-            if ($first = $this->dataProvider[array_key_first($this->dataProvider)]) {
-                if (is_object($first) && $first instanceof Model) {
-                    $res = [];
-
-                    foreach ($first->attributes as $attribute) {
-                        $res[] = [
-                            'attribute' => $attribute,
-                            'label' => $attribute,
-                        ];
-                    }
-
-                    return $res;
-                } elseif (is_array($first)) {
-                    $res = [];
-
-                    foreach ($first as $attribute) {
-                        $res[] = [
-                            'attribute' => $attribute,
-                            'label' => $attribute,
-                        ];
-                    }
-
-                    return $res;
-                }
-
-                throw new \DomainException('Неизвестный объект в GridView');
-            }
         }
 
-        return [];
+        $first = $this->dataProvider[array_key_first($this->dataProvider)] ?? null;
+
+        if (!$first) {
+            return [];
+        }
+
+        if ($first instanceof Model) {
+            return $this->buildDefaultColumns($first->attributes);
+        }
+
+        if (is_array($first)) {
+            return $this->buildDefaultColumns(array_keys($first));
+        }
+
+        throw new \DomainException('Неизвестный объект в GridView');
+    }
+
+    private function buildDefaultColumns(array $attributes): array
+    {
+        $columns = [];
+
+        foreach ($attributes as $attribute) {
+            $columns[] = [
+                'attribute' => $attribute,
+                'label' => $attribute,
+            ];
+        }
+
+        return $columns;
     }
 
     private function getPaginatedData(): array
@@ -156,35 +151,10 @@ class GridView
             <a href="' . Url::toRoute(Url::currentController() . '/update', ['id' => $id]) . '" class="btn btn-warning btn-sm me-2" title="Изменить">
                 <i class="bi bi-pencil"></i>
             </a>
-            <a href="" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal' . $id . '">
+            <a href="' . Url::toRoute(Url::currentController() . '/delete', ['id' => $id]) . '" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
                 <i class="bi bi-trash"></i>
             </a>
         </div>
-    
-        <!-- Modal -->
-        <div class="modal fade" id="deleteConfirmModal' . $id . '" tabindex="-1" aria-labelledby="deleteConfirmLabel' . $id . '" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmLabel' . $id . '">Подтверждение удаления</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Вы уверены, что хотите удалить этот элемент?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                        <a href="' . Url::toRoute(Url::currentController() . '/delete', ['id' => $id]) . '" class="btn btn-danger">Удалить</a>
-                    </div>
-                </div>
-            </div>
-        </div>
         ';
-    }
-
-    public function setActionColumns(array $columns): self
-    {
-        $this->actionColumns = $columns;
-        return $this;
     }
 }
