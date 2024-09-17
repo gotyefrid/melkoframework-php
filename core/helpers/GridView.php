@@ -7,11 +7,11 @@ use core\Model;
 class GridView
 {
     private $columns = null;
-    public $dataProvider = [];
-    public $pagination = false;
+    private $dataProvider = [];
+    private $paginationEnabled = false;
     private $currentPage = 1;
-    private $itemsPerPage = 10;
-    private $enableItemsPerPageSelector = false;
+    private $defaultItemsPerPage = 10;
+    private $itemsPerPageSelectorEnabled = false;
 
     public function __construct(array $data = [])
     {
@@ -20,8 +20,8 @@ class GridView
 
     public function setPagination(bool $enabled, int $itemsPerPage = 10): self
     {
-        $this->pagination = $enabled;
-        $this->itemsPerPage = $itemsPerPage;
+        $this->paginationEnabled = $enabled;
+        $this->defaultItemsPerPage = $itemsPerPage;
 
         return $this;
     }
@@ -35,65 +35,11 @@ class GridView
 
     public function enableItemsPerPageSelector(bool $enabled = true): self
     {
-        $this->enableItemsPerPageSelector = $enabled;
+        $this->itemsPerPageSelectorEnabled = $enabled;
+
         return $this;
     }
 
-    private function getItemsPerPage()
-    {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if ($this->enableItemsPerPageSelector) {
-            if (isset($_GET['itemsPerPage'])) {
-                $itemsPerPage = $_GET['itemsPerPage'];
-                $_SESSION['gridview_itemsPerPage'] = $itemsPerPage;
-            } elseif (isset($_SESSION['gridview_itemsPerPage'])) {
-                $itemsPerPage = $_SESSION['gridview_itemsPerPage'];
-            } else {
-                $itemsPerPage = $this->itemsPerPage;
-            }
-
-            if ($itemsPerPage == 'all') {
-                return 'all';
-            } else {
-                return (int)$itemsPerPage;
-            }
-        } else {
-            return $this->itemsPerPage;
-        }
-    }
-
-    public function render(): string
-    {
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $itemsPerPage = $this->getItemsPerPage();
-
-        if (!$this->dataProvider) {
-            return 'Нет записей';
-        }
-
-        $data = $this->pagination ? $this->getPaginatedData() : $this->dataProvider;
-
-        return Renderer::render(__DIR__ . '/_grid.php', [
-            'data' => $data,
-            'columns' => $this->getColumns(),
-            'pagination' => $this->pagination ? $this->getPaginationControls() : '',
-            'grid' => $this,
-            'itemsPerPage' => $itemsPerPage,
-            'enableItemsPerPageSelector' => $this->enableItemsPerPageSelector
-        ]);
-    }
-
-    /**
-     * @param array<array{attribute: string, label: string, value: callable(mixed): mixed}> $columns
-     *
-     * @return $this
-     */
     public function setColumns(array $columns): self
     {
         $this->columns = $columns;
@@ -101,24 +47,42 @@ class GridView
         return $this;
     }
 
-    public function getColumns(): array
+    public function render(): string
     {
-        if ($this->columns) {
+        $this->startSession();
+
+        if (empty($this->dataProvider)) {
+            return 'Нет записей';
+        }
+
+        $itemsPerPage = $this->getItemsPerPage();
+        $data = $this->paginationEnabled ? $this->getPaginatedData($itemsPerPage) : $this->dataProvider;
+        $paginationControls = $this->paginationEnabled ? $this->getPaginationControls($itemsPerPage) : '';
+
+        return Renderer::render(__DIR__ . '/_grid.php', [
+            'data' => $data,
+            'columns' => $this->getColumns(),
+            'pagination' => $paginationControls,
+            'grid' => $this,
+            'itemsPerPage' => $itemsPerPage,
+            'itemsPerPageSelectorEnabled' => $this->itemsPerPageSelectorEnabled,
+        ]);
+    }
+
+    private function getColumns(): array
+    {
+        if ($this->columns !== null) {
             return $this->columns;
         }
 
-        $first = $this->dataProvider[array_key_first($this->dataProvider)] ?? null;
+        $firstItem = reset($this->dataProvider);
 
-        if (!$first) {
-            return [];
+        if ($firstItem instanceof Model) {
+            return $this->buildDefaultColumns($firstItem->attributes);
         }
 
-        if ($first instanceof Model) {
-            return $this->buildDefaultColumns($first->attributes);
-        }
-
-        if (is_array($first)) {
-            return $this->buildDefaultColumns(array_keys($first));
+        if (is_array($firstItem)) {
+            return $this->buildDefaultColumns(array_keys($firstItem));
         }
 
         throw new \DomainException('Неизвестный объект в GridView');
@@ -126,54 +90,65 @@ class GridView
 
     private function buildDefaultColumns(array $attributes): array
     {
-        $columns = [];
-
-        foreach ($attributes as $attribute) {
-            $columns[] = [
-                'attribute' => $attribute,
-                'label' => $attribute,
-            ];
-        }
-
-        return $columns;
+        return array_map(function ($attribute) {
+            return ['attribute' => $attribute, 'label' => $attribute];
+        }, $attributes);
     }
 
-    private function getPaginatedData(): array
+    private function getItemsPerPage()
     {
-        $itemsPerPage = $this->getItemsPerPage();
+        if (!$this->itemsPerPageSelectorEnabled) {
+            return $this->defaultItemsPerPage;
+        }
+
+        $this->startSession();
+
+        if (isset($_GET['itemsPerPage'])) {
+            $itemsPerPage = $_GET['itemsPerPage'];
+            $_SESSION['gridview_itemsPerPage'] = $itemsPerPage;
+        } elseif (isset($_SESSION['gridview_itemsPerPage'])) {
+            $itemsPerPage = $_SESSION['gridview_itemsPerPage'];
+        } else {
+            $itemsPerPage = $this->defaultItemsPerPage;
+        }
+
+        return $itemsPerPage === 'all' ? 'all' : (int)$itemsPerPage;
+    }
+
+    private function getPaginatedData($itemsPerPage): array
+    {
         if ($itemsPerPage === 'all') {
             return $this->dataProvider;
         }
+
         $offset = ($this->currentPage - 1) * $itemsPerPage;
+
         return array_slice($this->dataProvider, $offset, $itemsPerPage);
     }
 
-    private function getPaginationControls(): string
+    private function getPaginationControls($itemsPerPage): string
     {
-        $itemsPerPage = $this->getItemsPerPage();
         if ($itemsPerPage === 'all') {
             return '';
         }
 
         $totalItems = count($this->dataProvider);
-        $totalPages = ceil($totalItems / $itemsPerPage);
+        $totalPages = (int)ceil($totalItems / $itemsPerPage);
+        $range = 3;
         $html = '<nav><ul class="pagination pagination-dark">';
 
-        $range = 3;
-
         if ($this->currentPage > 1 + $range) {
-            $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl(1) . '">1</a></li>';
+            $html .= $this->buildPageLink(1);
             $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
         }
 
         for ($i = max(1, $this->currentPage - $range); $i <= min($totalPages, $this->currentPage + $range); $i++) {
-            $active = ($i === $this->currentPage) ? ' active' : '';
-            $html .= '<li class="page-item' . $active . '"><a class="page-link" href="' . $this->getPagingUrl($i) . '">' . $i . '</a></li>';
+            $html .= $this->buildPageLink($i, $i === $this->currentPage);
         }
 
         if ($this->currentPage < $totalPages - $range) {
             $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-            $html .= '<li class="page-item"><a class="page-link" href="' . $this->getPagingUrl($totalPages) . '">' . $totalPages . '</a></li>';
+            $html .= $this->buildPageLink($totalPages);
         }
 
         $html .= '</ul></nav>';
@@ -181,15 +156,23 @@ class GridView
         return $html;
     }
 
+    private function buildPageLink(int $page, bool $isActive = false): string
+    {
+        $activeClass = $isActive ? ' active' : '';
+        $url = $this->getPagingUrl($page);
+
+        return "<li class=\"page-item{$activeClass}\"><a class=\"page-link\" href=\"{$url}\">{$page}</a></li>";
+    }
+
     private function getPagingUrl(int $page): string
     {
         $params = $_GET;
-        unset($params['path']);
         $params['page'] = $page;
+        unset($params['path']);
 
-        if ($this->enableItemsPerPageSelector) {
-            $itemsPerPageValue = isset($_GET['itemsPerPage']) ? $_GET['itemsPerPage'] : (isset($_SESSION['gridview_itemsPerPage']) ? $_SESSION['gridview_itemsPerPage'] : $this->itemsPerPage);
-            $params['itemsPerPage'] = $itemsPerPageValue;
+        if ($this->itemsPerPageSelectorEnabled) {
+            $itemsPerPage = $this->getItemsPerPage();
+            $params['itemsPerPage'] = $itemsPerPage;
         }
 
         return Url::toRoute(Url::currentRoute(), $params);
@@ -206,17 +189,27 @@ class GridView
         return Url::toRoute(Url::currentRoute(), $params);
     }
 
-    public function getActionsColumns(int $id): string
+    public function getActionsColumnHtml(int $id): string
     {
-        return '
-        <div class="">
-            <a href="' . Url::toRoute(Url::currentController() . '/update', ['id' => $id]) . '" class="btn btn-warning btn-sm me-2" title="Изменить">
+        $updateUrl = Url::toRoute(Url::currentController() . '/update', ['id' => $id]);
+        $deleteUrl = Url::toRoute(Url::currentController() . '/delete', ['id' => $id]);
+
+        return <<<HTML
+        <div class="action-buttons">
+            <a href="{$updateUrl}" class="btn btn-warning btn-sm me-2" title="Изменить">
                 <i class="bi bi-pencil"></i>
             </a>
-            <a href="' . Url::toRoute(Url::currentController() . '/delete', ['id' => $id]) . '" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+            <a href="{$deleteUrl}" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
                 <i class="bi bi-trash"></i>
             </a>
         </div>
-        ';
+        HTML;
+    }
+
+    private function startSession(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
     }
 }
