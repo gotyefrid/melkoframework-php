@@ -5,30 +5,34 @@
  * @var array<array{attribute: string, label: string, value?: callable(mixed): mixed}> $columns
  * @var string $pagination
  * @var int|string $itemsPerPage
- * @var bool $enableItemsPerPageSelector
+ * @var bool $itemsPerPageSelectorEnabled
  */
 
 use core\helpers\GridView;
 
 ?>
 
-<?php if ($enableItemsPerPageSelector): ?>
+<?php if (isset($itemsPerPageSelectorEnabled) && $itemsPerPageSelectorEnabled): ?>
     <div class="d-flex justify-content-end mb-2">
-        <form method="get" id="itemsPerPageForm" class="form-inline" action="<?= htmlspecialchars($grid->getCurrentUrlWithoutParams(['itemsPerPage', 'page'])) ?>">
+        <form method="get" id="itemsPerPageForm" class="form-inline"
+              action="<?= htmlspecialchars($grid->getCurrentUrlWithoutParams(['itemsPerPage', 'page'])) ?>">
             <label for="itemsPerPage" class="me-2">Показать по:</label>
             <select name="itemsPerPage" id="itemsPerPage" class="form-control form-control-sm">
                 <?php
                 $options = [10, 50, 100, 200, 500, 'all'];
                 foreach ($options as $option) {
-                    $selected = ($itemsPerPage == $option) ? 'selected' : '';
-                    echo '<option value="' . $option . '" ' . $selected . '>' . ($option == 'all' ? 'Все' : $option) . '</option>';
+                    $isSelected = ($itemsPerPage == $option) ? 'selected' : '';
+                    $optionLabel = ($option === 'all') ? 'Все' : $option;
+                    echo "<option value=\"{$option}\" {$isSelected}>{$optionLabel}</option>";
                 }
                 ?>
             </select>
             <?php
             foreach ($_GET as $key => $value) {
-                if ($key != 'itemsPerPage' && $key != 'page') {
-                    echo '<input type="hidden" name="' . htmlspecialchars($key) . '" value="' . htmlspecialchars($value) . '">';
+                if (!in_array($key, ['itemsPerPage', 'page'])) {
+                    $keyEscaped = htmlspecialchars($key);
+                    $valueEscaped = htmlspecialchars($value);
+                    echo "<input type=\"hidden\" name=\"{$keyEscaped}\" value=\"{$valueEscaped}\">";
                 }
             }
             ?>
@@ -51,13 +55,20 @@ use core\helpers\GridView;
         </tr>
         </thead>
         <tbody>
-        <?php foreach ($data as $index => $item): ?>
+        <?php foreach ($data as $item): ?>
             <tr>
                 <?php foreach ($columns as $columnData): ?>
-                    <?php if ($columnData['attribute'] === '{{actions}}') : ?>
-                        <td><?= $grid->getActionsColumns($item['id']) ?></td>
+                    <?php if ($columnData['attribute'] === '{{actions}}'): ?>
+                        <td><?= $grid->getActionsColumnHtml($item['id']) ?></td>
                     <?php else: ?>
-                        <td><?= isset($columnData['value']) ? $columnData['value']($item) : htmlspecialchars($item[$columnData['attribute']] ?? '') ?></td>
+                        <td>
+                            <?php
+                            $value = $columnData['value'] ?? function ($item) use ($columnData) {
+                                return $item[$columnData['attribute']] ?? '';
+                            };
+                            echo htmlspecialchars($value($item));
+                            ?>
+                        </td>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </tr>
@@ -71,34 +82,39 @@ use core\helpers\GridView;
 </div>
 
 <?php
-$isContainsActions = !empty(array_filter($columns, function ($column) {
-    return isset($column['attribute']) && $column['attribute'] === '{{actions}}';
-}));
+$isActionsColumnPresent = array_filter(
+    $columns,
+    function ($column) {
+        return $column['attribute'] === '{{actions}}';
+    });
 
-if ($isContainsActions) : ?>
-    <!-- Modal -->
-    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel" aria-hidden="true">
+if ($isActionsColumnPresent): ?>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmLabel">Подтверждение удаления</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 id="deleteConfirmLabel" class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     Вы уверены, что хотите удалить этот элемент?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <a href="" class="btn btn-danger" id="deleteLink">Удалить</a>
+                    <a href="#" class="btn btn-danger" id="confirmDeleteButton">Удалить</a>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        $(document).on('click', '[data-bs-target="#deleteConfirmModal"]', function (event) {
-            event.preventDefault();
-            const hrefValue = $(this).attr('href');
-            $('#deleteLink').attr('href', hrefValue);
+        document.querySelectorAll('[data-bs-target="#deleteConfirmModal"]').forEach(function (element) {
+            element.addEventListener('click', function (event) {
+                event.preventDefault();
+                const deleteUrl = this.getAttribute('href');
+                document.getElementById('confirmDeleteButton').setAttribute('href', deleteUrl);
+            });
         });
     </script>
 <?php endif; ?>
