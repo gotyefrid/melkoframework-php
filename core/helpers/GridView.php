@@ -11,7 +11,7 @@ class GridView
     private $paginationEnabled = false;
     private $currentPage = 1;
     private $defaultItemsPerPage = 10;
-    private $itemsPerPageSelectorEnabled = false;
+    private $itemsPerPageSelectorEnabled = true;
 
     public function __construct(array $data = [])
     {
