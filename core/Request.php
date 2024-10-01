@@ -4,26 +4,27 @@ namespace core;
 
 class Request
 {
-    private $path;
+    private $route;
+    public $routeParameterName = 'route';
 
     public function __construct()
     {
-        $this->path = isset($_GET['path']) ? $_GET['path'] : Router::DEFAULT_ROUTE;
+        $this->route = $_GET[$this->routeParameterName] ?? Router::DEFAULT_ROUTE;
     }
 
-    public function getPath(): string
+    public function getRoute(): string
     {
-        return $this->path;
+        return $this->route;
     }
 
     public function getAction()
     {
-        return explode('/', $this->getPath())[1] ?? '';
+        return explode('/', $this->getRoute())[1] ?? '';
     }
 
     public function getController()
     {
-        return explode('/', $this->getPath())[0] ?? '';
+        return explode('/', $this->getRoute())[0] ?? '';
     }
 
     public function getMethod(): string
@@ -38,6 +39,6 @@ class Request
 
     public function setRoute(string $path)
     {
-        $this->path = $path;
+        $this->route = $path;
     }
 }

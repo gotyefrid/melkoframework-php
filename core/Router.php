@@ -13,8 +13,14 @@ class Router
 
     public const DEFAULT_ROUTE = 'home/index';
 
-    public function __construct()
+    /**
+     * @var Request
+     */
+    private $request;
+
+    public function __construct(Request $request)
     {
+        $this->request = $request;
     }
 
     public function get($path, $callback)
@@ -29,22 +35,23 @@ class Router
 
     /**
      * @return mixed
+     * @throws NotFoundException
      */
     public function resolve()
     {
-        $path = Application::$app->request->getPath();
+        $route = $this->request->getRoute();
 
-        if ($path === '/' || $path === '') {
-            Application::$app->request->setRoute(static::DEFAULT_ROUTE);
+        if ($route === '/' || $route === '') {
+            $this->request->setRoute(static::DEFAULT_ROUTE);
         }
 
-        $method = Application::$app->request->getMethod();
+        $method = $this->request->getMethod();
 
         if ($this->isActionExist()) {
             return $this->callAction();
         }
 
-        $callback = $this->routes[$method][$path] ?? false;
+        $callback = $this->routes[$method][$route] ?? false;
 
         if ($callback === false) {
             throw new NotFoundException();
@@ -56,7 +63,7 @@ class Router
     protected function isActionExist(): bool
     {
         $controller = $this->getControllerInstance();
-        $actionMethod = 'action' . ucfirst(Application::$app->request->getAction());
+        $actionMethod = 'action' . ucfirst($this->request->getAction());
 
         return $controller !== null && method_exists($controller, $actionMethod);
     }
@@ -74,16 +81,17 @@ class Router
 
     protected function getControllerClassName(): string
     {
-        return 'src\\controllers\\' . ucfirst(Application::$app->request->getController()) . 'Controller';
+        return 'src\\controllers\\' . ucfirst($this->request->getController()) . 'Controller';
     }
 
     /**
      * @return mixed
+     * @throws NotFoundException
      */
     protected function callAction()
     {
         $controller = $this->getControllerInstance();
-        $action = 'action' . ucfirst(Application::$app->request->getAction());
+        $action = 'action' . ucfirst($this->request->getAction());
 
         if (!$controller || !method_exists($controller, $action)) {
             throw new NotFoundException('Экшен не найден');

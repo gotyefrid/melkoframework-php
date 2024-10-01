@@ -2,6 +2,7 @@
 /** @var array $errors */
 /** @var User $model */
 
+use core\helpers\Url;
 use src\models\User;
 
 ?>
@@ -9,7 +10,7 @@ use src\models\User;
     <div class="row justify-content-center">
         <div class="col-md-4">
             <h3 class="text-center mb-4">Вход</h3>
-            <form id="loginForm" method="POST" action="?path=auth/login">
+            <form id="loginForm" method="POST" action="<?= Url::toRoute('auth/login') ?>">
                 <div class="mb-3">
                     <label for="username" class="form-label">Логин</label>
                     <input type="text" class="form-control <?php echo isset($errors['username']) ? 'is-invalid' : ''; ?>" id="username" name="username" value="<?= $model->username ?>" required>

@@ -2,6 +2,7 @@
 
 namespace core\helpers;
 
+use core\Application;
 use core\Model;
 
 class GridView
@@ -168,7 +169,7 @@ class GridView
     {
         $params = $_GET;
         $params['page'] = $page;
-        unset($params['path']);
+        unset($params[Application::$app->request->routeParameterName]);
 
         if ($this->itemsPerPageSelectorEnabled) {
             $itemsPerPage = $this->getItemsPerPage();
@@ -184,7 +185,7 @@ class GridView
         foreach ($excludeParams as $param) {
             unset($params[$param]);
         }
-        unset($params['path']);
+        unset($params[Application::$app->request->routeParameterName]);
 
         return Url::toRoute(Url::currentRoute(), $params);
     }

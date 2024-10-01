@@ -18,10 +18,11 @@ class Application
 
     public function __construct()
     {
+        $request = new Request();
         self::$app = new AppConfig(
-            new Router(),
+            new Router($request),
             new ErrorHandler(),
-            new Request(),
+            $request,
             new \PDO('sqlite:' . self::$dbPath)
         );
     }

@@ -2,6 +2,8 @@
 
 namespace core\helpers;
 
+use core\Application;
+
 class Url
 {
     public static function getDomain(bool $withProtocol = true): string
@@ -30,7 +32,7 @@ class Url
     {
         $url = self::getDomain() . $_SERVER['REQUEST_URI'];
 
-        if (!$withQuery) {
+        if ($withQuery === false) {
             $urlComponents = parse_url($url);
             $url = $urlComponents['scheme'] . '://' . $urlComponents['host'] . $urlComponents['path'];
         }
@@ -40,7 +42,7 @@ class Url
 
     public static function toRoute(string $path, array $params = []): string
     {
-        $params = array_merge(['path' => $path], $params);
+        $params = array_merge([Application::$app->request->routeParameterName => $path], $params);
 
         $baseUrl = self::getCurrentUrl(false);
 
@@ -54,16 +56,16 @@ class Url
 
     public static function currentRoute(): string
     {
-        return $_GET['path'] ?? '';
+        return $_GET[Application::$app->request->routeParameterName] ?? Application::$app->router::DEFAULT_ROUTE;
     }
 
     public static function currentAction(): string
     {
-        return isset($_GET['path']) ? (explode('/', $_GET['path'])[1] ?? '') : '';
+        return isset($_GET[Application::$app->request->routeParameterName]) ? (explode('/', $_GET[Application::$app->request->routeParameterName])[1] ?? '') : '';
     }
 
     public static function currentController(): string
     {
-        return isset($_GET['path']) ? (explode('/', $_GET['path'])[0] ?? '') : '';
+        return isset($_GET[Application::$app->request->routeParameterName]) ? (explode('/', $_GET[Application::$app->request->routeParameterName])[0] ?? '') : '';
     }
 }

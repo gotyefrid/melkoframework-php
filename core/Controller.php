@@ -42,19 +42,23 @@ abstract class Controller
     }
 
     /**
-     * @param string $path
+     * @param string $route
      * @param bool $absolute
      *
      * @return int
      */
-    public function redirect(string $path, bool $absolute = false): int
+    public function redirect(string $route, bool $absolute = false): int
     {
         if ($absolute) {
-            header('Location: ' . $path);
+            header('Location: ' . $route);
             exit();
         }
 
-        header('Location: ' . '?path=' . $path);
+        $query = [
+            $this->request->routeParameterName => $route
+        ];
+
+        header('Location: ' . '?' . http_build_query($query));
         exit();
     }
 
