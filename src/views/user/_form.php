@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
+
 /** @var array $errors */
 /** @var string $route */
 /** @var bool $update */
 /** @var User $model */
 
+use core\helpers\ArrayHelper;
 use src\models\User;
 
 ?>
@@ -24,7 +27,7 @@ use src\models\User;
             <div class="invalid-feedback" id="passwordError"><?= $errors['password']; ?></div>
         <?php endif; ?>
     </div>
-    <input type="hidden" name="id" value="<?= $model['id'] ?? '' ?>">
+    <input type="hidden" name="id" value="<?= ArrayHelper::getValue($model, 'id') ?? '' ?>">
     <div id="errorMessages" class="text-danger mb-3">
         <?php if (isset($errors['general'])): ?>
             <?= implode('<br>', $errors['general']); ?>

@@ -10,14 +10,16 @@ declare(strict_types=1);
  * @var bool $itemsPerPageSelectorEnabled
  */
 
+use core\helpers\ArrayHelper;
 use core\helpers\GridView;
+use core\helpers\Url;
 
 ?>
 
 <?php if (isset($itemsPerPageSelectorEnabled) && $itemsPerPageSelectorEnabled): ?>
     <div class="d-flex justify-content-end mb-2">
         <form method="get" id="itemsPerPageForm" class="form-inline"
-              action="<?= htmlspecialchars($grid->getCurrentUrlWithoutParams(['itemsPerPage', 'page'])) ?>">
+              action="<?= Url::getCurrentUrl()  ?>">
             <label for="itemsPerPage" class="me-2">Показать по:</label>
             <select name="itemsPerPage" id="itemsPerPage" class="form-control form-control-sm">
                 <?php
@@ -62,12 +64,12 @@ use core\helpers\GridView;
             <tr>
                 <?php foreach ($columns as $columnData): ?>
                     <?php if ($columnData['attribute'] === '{{actions}}'): ?>
-                        <td><?= $grid->getActionsColumnHtml($item['id']) ?></td>
+                        <td><?= $grid->getActionsColumnHtml(ArrayHelper::getValue($item, 'id')) ?></td>
                     <?php else: ?>
                         <td>
                             <?php
                             $value = $columnData['value'] ?? function ($item) use ($columnData) {
-                                return $item[$columnData['attribute']] ?? '';
+                                return ArrayHelper::getValue($item, $columnData['attribute'], '');
                             };
                             echo htmlspecialchars((string)$value($item));
                             ?>

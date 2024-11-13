@@ -16,5 +16,6 @@ $app = new App(
     new Request(),
     new PDO('sqlite:' . __DIR__ . '/databases/database.db'),
     new ErrorHandler(),
+    false
 );
 $app->run();

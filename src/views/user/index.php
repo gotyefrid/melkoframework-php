@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+declare(strict_types=1);
 
 use core\helpers\GridView;
 use core\helpers\Url;

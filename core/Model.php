@@ -16,7 +16,7 @@ abstract class Model
         'id'
     ];
 
-    public array $errors;
+    public array $errors = [];
 
     abstract public static function tableName(): string;
 

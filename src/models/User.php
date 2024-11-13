@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace src\models;
 
@@ -14,14 +15,14 @@ class User extends Model
     /**
      * @var string
      */
-    public $username;
+    public string $username = '';
 
     /**
      * @var string
      */
-    public $password;
+    public string $password = '';
 
-    public $attributes = [
+    public array $attributes = [
         'id',
         'username',
         'password',

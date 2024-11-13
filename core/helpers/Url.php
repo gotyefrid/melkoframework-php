@@ -22,7 +22,10 @@ class Url
         // Добавляем порт, если он не является стандартным
         $port = $_SERVER['SERVER_PORT'];
 
-        if (($protocol === 'http' && $port != 80) || ($protocol === 'https' && $port != 443)) {
+        $isNonStandardPort = ($protocol === 'http' && $port != 80) || ($protocol === 'https' && $port != 443);
+        $hostHasNoPort = strpos($host, ':') === false;
+
+        if ($isNonStandardPort && $hostHasNoPort) {
             $domain .= ':' . $port;
         }
 
@@ -44,10 +47,9 @@ class Url
     public static function toRoute(string $path, array $params = []): string
     {
         if (App::$app->isGetParamRouter) {
-            $baseUrl = self::getCurrentUrl(false);
             $params = array_merge([App::$app->getRequest()->routeParameterName => $path], $params);
 
-            return $baseUrl . '?' . http_build_query($params);
+            return '/' . '?' . http_build_query($params);
         }
 
         return '/' . $path . ($params ? '?' . http_build_query($params) : '');

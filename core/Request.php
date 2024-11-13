@@ -74,7 +74,7 @@ class Request
             }
 
             // Удаляем префиксный "/"
-            $route = substr($path, 1);
+            $route = ltrim($path, '/');
         }
 
         return $route;
@@ -102,6 +102,6 @@ class Request
 
     public function isPost(): bool
     {
-        return $this->getMethod() == 'POST';
+        return strtolower($this->getMethod()) == strtolower('POST');
     }
 }

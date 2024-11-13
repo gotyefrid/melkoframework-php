@@ -42,22 +42,31 @@ abstract class Controller
 
     /**
      * @param string $route
+     * @param array $params
      * @param bool $absolute
      *
      * @return int
      */
-    public function redirect(string $route, bool $absolute = false): int
+    public function redirect(string $route, array $params = [], bool $absolute = false): int
     {
+        // Если это абсолютный URL, редиректим сразу
         if ($absolute) {
-            header('Location: ' . $route);
+            $url = $route . (!empty($params) ? '?' . http_build_query($params) : '');
+            header('Location: ' . $url);
             exit();
         }
 
-        $query = [
-            $this->request->routeParameterName => $route
-        ];
+        // Если роутинг через GET-параметр, добавляем параметр маршрута
+        if (App::$app->isGetParamRouter) {
+            $params = array_merge([$this->request->routeParameterName => $route], $params);
+            $url = '/?' . http_build_query($params);
+        } else {
+            // Относительный URL с GET-параметрами, если они есть
+            $url = '/' . ltrim($route, '/') . (!empty($params) ? '?' . http_build_query($params) : '');
+        }
 
-        header('Location: ' . '?' . http_build_query($query));
+        // Выполняем редирект и завершаем выполнение
+        header('Location: ' . $url);
         exit();
     }
 

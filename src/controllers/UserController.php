@@ -1,6 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
-/** @noinspection PhpUnused */
 
 namespace src\controllers;
 
@@ -9,6 +8,7 @@ use core\exceptions\BadRequestException;
 use core\exceptions\NotFoundException;
 use core\FlashMessageWidget;
 use src\models\User;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -23,7 +23,7 @@ class UserController extends Controller
     /**
      * @return string
      * @throws NotFoundException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function actionIndex(): string
     {
@@ -34,7 +34,7 @@ class UserController extends Controller
 
     /**
      * @throws NotFoundException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function actionCreate()
     {
@@ -57,7 +57,7 @@ class UserController extends Controller
      * @return int|string
      * @throws BadRequestException
      * @throws NotFoundException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function actionUpdate()
     {

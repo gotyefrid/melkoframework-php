@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+declare(strict_types=1);
 /** @var array $errors */
 
 /** @var User $model */
