@@ -15,7 +15,7 @@ if (preg_match('/\.(?!php|db$).+$/', $_SERVER["REQUEST_URI"])) {
 $app = new App(
     new Request(),
     new PDO('sqlite:' . __DIR__ . '/databases/database.db'),
-    new ErrorHandler(),
+    new ErrorHandler(true),
     false
 );
 $app->run();
