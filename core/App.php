@@ -31,6 +31,7 @@ class App
 
     /**
      * @return void
+     * @throws Throwable
      */
     public function run(): void
     {
