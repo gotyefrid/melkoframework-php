@@ -1,29 +1,28 @@
 <?php
+declare(strict_types=1);
 
 namespace core;
 
 use core\exceptions\NotFoundException;
 use core\helpers\Renderer;
+use Throwable;
 
 abstract class Controller
 {
-    public static $title = 'Заголовок';
+    public static string $title = 'Заголовок';
 
-    public $layout = 'main';
+    public string $layout = 'main';
 
-    /**
-     * @var Request|null
-     */
-    public $request = null;
+    public Request $request;
 
     public function __construct()
     {
-        $this->request = Application::$app->request;
+        $this->request = App::$app->getRequest();
     }
 
     /**
      * @throws NotFoundException
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function render(string $view, array $params = []): string
     {
@@ -69,5 +68,30 @@ abstract class Controller
         if (!$auth->isAuthenticated()) {
             $this->redirect('auth/login');
         }
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return bool
+     */
+    public function isActionExist(string $action): bool
+    {
+        return method_exists($this, 'action' . ucfirst($action));
+    }
+
+    /**
+     * @param string $action
+     *
+     * @return mixed
+     * @throws NotFoundException
+     */
+    public function callAction(string $action)
+    {
+        if ($this->isActionExist($action)) {
+            return $this->{'action' . ucfirst($action)}();
+        }
+
+        throw new NotFoundException('Не найден такой экшен');
     }
 }

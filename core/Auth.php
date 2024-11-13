@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace core;
 
@@ -7,15 +8,9 @@ use Exception;
 
 class Auth
 {
-    /**
-     * @var User|null
-     */
-    protected $user = null;
+    protected ?User $user = null;
 
-    /**
-     * @var string
-     */
-    protected $sessionKey = 'user_id';
+    protected string $sessionKey = 'user_id';
 
     public function __construct()
     {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace core\exceptions;
 
@@ -13,6 +14,10 @@ class NotFoundException extends BaseException implements HttpErrorInterface
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * @return string
+     * @throws Throwable
+     */
     public function getErrorHtml(): string
     {
         $homeUrl = Url::toHome();

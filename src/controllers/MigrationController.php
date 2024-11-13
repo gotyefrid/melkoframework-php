@@ -2,7 +2,7 @@
 
 namespace src\controllers;
 
-use core\Application;
+use core\App;
 use core\Controller;
 use src\models\User;
 
@@ -29,12 +29,12 @@ class MigrationController extends Controller
 
     private function initUserTable(): void
     {
-        $result = Application::$app->db->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users';");
+        $result = App::$app->getPdo()->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users';");
 
         if ($result->fetch()) {
             echo "Таблица users уже существует <br>";
         } else {
-            Application::$app->db->exec("CREATE TABLE IF NOT EXISTS users (
+            App::$app->getPdo()->exec("CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY,
                     username TEXT,
                     password TEXT

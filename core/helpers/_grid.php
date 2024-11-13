@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * @var GridView $grid
  * @var array $data
@@ -22,8 +24,9 @@ use core\helpers\GridView;
                 $options = [10, 50, 100, 200, 500, 'all'];
                 foreach ($options as $option) {
                     $isSelected = ($itemsPerPage == $option) ? 'selected' : '';
+                    /** @var int|string $option */
                     $optionLabel = ($option === 'all') ? 'Все' : $option;
-                    echo "<option value=\"{$option}\" {$isSelected}>{$optionLabel}</option>";
+                    echo "<option value=\"$option\" $isSelected>$optionLabel</option>";
                 }
                 ?>
             </select>
@@ -32,7 +35,7 @@ use core\helpers\GridView;
                 if (!in_array($key, ['itemsPerPage', 'page'])) {
                     $keyEscaped = htmlspecialchars($key);
                     $valueEscaped = htmlspecialchars($value);
-                    echo "<input type=\"hidden\" name=\"{$keyEscaped}\" value=\"{$valueEscaped}\">";
+                    echo "<input type=\"hidden\" name=\"$keyEscaped\" value=\"$valueEscaped\">";
                 }
             }
             ?>
@@ -66,7 +69,7 @@ use core\helpers\GridView;
                             $value = $columnData['value'] ?? function ($item) use ($columnData) {
                                 return $item[$columnData['attribute']] ?? '';
                             };
-                            echo htmlspecialchars($value($item));
+                            echo htmlspecialchars((string)$value($item));
                             ?>
                         </td>
                     <?php endif; ?>

@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnused */
+<?php
+declare(strict_types=1);
+/** @noinspection PhpUnused */
 
 namespace src\controllers;
 
@@ -10,7 +12,7 @@ use src\models\User;
 
 class UserController extends Controller
 {
-    public static $title = 'Пользователи';
+    public static string $title = 'Пользователи';
 
     public function __construct()
     {

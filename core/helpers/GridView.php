@@ -1,18 +1,21 @@
 <?php
+declare(strict_types=1);
 
 namespace core\helpers;
 
-use core\Application;
+use core\App;
 use core\Model;
+use DomainException;
+use Throwable;
 
 class GridView
 {
-    private $columns = null;
-    private $dataProvider = [];
-    private $paginationEnabled = false;
-    private $currentPage = 1;
-    private $defaultItemsPerPage = 10;
-    private $itemsPerPageSelectorEnabled = true;
+    private ?array $columns = null;
+    private array $dataProvider;
+    private bool $paginationEnabled = false;
+    private int $currentPage = 1;
+    private int $defaultItemsPerPage = 10;
+    private bool $itemsPerPageSelectorEnabled = true;
 
     public function __construct(array $data = [])
     {
@@ -48,6 +51,10 @@ class GridView
         return $this;
     }
 
+    /**
+     * @return string
+     * @throws Throwable
+     */
     public function render(): string
     {
         $this->startSession();
@@ -86,7 +93,7 @@ class GridView
             return $this->buildDefaultColumns(array_keys($firstItem));
         }
 
-        throw new \DomainException('Неизвестный объект в GridView');
+        throw new DomainException('Неизвестный объект в GridView');
     }
 
     private function buildDefaultColumns(array $attributes): array
@@ -162,14 +169,14 @@ class GridView
         $activeClass = $isActive ? ' active' : '';
         $url = $this->getPagingUrl($page);
 
-        return "<li class=\"page-item{$activeClass}\"><a class=\"page-link\" href=\"{$url}\">{$page}</a></li>";
+        return "<li class=\"page-item$activeClass\"><a class=\"page-link\" href=\"$url\">$page</a></li>";
     }
 
     private function getPagingUrl(int $page): string
     {
         $params = $_GET;
         $params['page'] = $page;
-        unset($params[Application::$app->request->routeParameterName]);
+        unset($params[App::$app->getRequest()->routeParameterName]);
 
         if ($this->itemsPerPageSelectorEnabled) {
             $itemsPerPage = $this->getItemsPerPage();
@@ -185,22 +192,22 @@ class GridView
         foreach ($excludeParams as $param) {
             unset($params[$param]);
         }
-        unset($params[Application::$app->request->routeParameterName]);
+        unset($params[App::$app->getRequest()->routeParameterName]);
 
         return Url::toRoute(Url::currentRoute(), $params);
     }
 
     public function getActionsColumnHtml(int $id): string
     {
-        $updateUrl = Url::toRoute(Url::currentController() . '/update', ['id' => $id]);
-        $deleteUrl = Url::toRoute(Url::currentController() . '/delete', ['id' => $id]);
+        $updateUrl = Url::toRoute(App::$app->getRequest()->getController() . '/update', ['id' => $id]);
+        $deleteUrl = Url::toRoute(App::$app->getRequest()->getController() . '/delete', ['id' => $id]);
 
         return <<<HTML
         <div class="action-buttons">
-            <a href="{$updateUrl}" class="btn btn-warning btn-sm me-2" title="Изменить">
+            <a href="$updateUrl" class="btn btn-warning btn-sm me-2" title="Изменить">
                 <i class="bi bi-pencil"></i>
             </a>
-            <a href="{$deleteUrl}" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+            <a href="$deleteUrl" class="btn btn-danger btn-sm" title="Удалить" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
                 <i class="bi bi-trash"></i>
             </a>
         </div>

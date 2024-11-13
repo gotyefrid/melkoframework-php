@@ -1,24 +1,22 @@
 <?php
+declare(strict_types=1);
 
 namespace core;
 
 use PDO;
 
-abstract class Model implements \ArrayAccess
+abstract class Model
 {
     /**
-     * @var int
+     * @var int|string
      */
     public $id;
 
-    public $attributes = [
+    public array $attributes = [
         'id'
     ];
 
-    /**
-     * @var array
-     */
-    public $errors;
+    public array $errors;
 
     abstract public static function tableName(): string;
 
@@ -44,7 +42,7 @@ abstract class Model implements \ArrayAccess
     public function delete(): bool
     {
         $sql = 'DELETE FROM ' . static::tableName() . ' WHERE id = :id';
-        $stmt = Application::$app->db->prepare($sql);
+        $stmt = App::$app->getPdo()->prepare($sql);
 
         return $stmt->execute([':id' => $this->id]);
     }
@@ -82,7 +80,7 @@ abstract class Model implements \ArrayAccess
             $sql = 'INSERT INTO ' . static::tableName() . " ($columnsList) VALUES ($placeholders)";
         }
 
-        $stmt = Application::$app->db->prepare($sql);
+        $stmt = App::$app->getPdo()->prepare($sql);
 
         // Привязка значений к подготовленному запросу
         foreach ($properties as $column => $value) {
@@ -91,7 +89,7 @@ abstract class Model implements \ArrayAccess
 
         if ($stmt->execute()) {
             if (!isset($properties['id']) || !$properties['id']) {
-                $this->id = Application::$app->db->lastInsertId(); // Присваивание ID, если это было создание новой записи
+                $this->id = App::$app->getPdo()->lastInsertId(); // Присваивание ID, если это было создание новой записи
             }
             return true;
         }
@@ -107,40 +105,10 @@ abstract class Model implements \ArrayAccess
      */
     public static function find(string $sql, array $params = []): array
     {
-        $stmt = Application::$app->db->prepare($sql);
+        $stmt = App::$app->getPdo()->prepare($sql);
         $stmt->execute($params);
-        return $stmt->fetchAll(\PDO::FETCH_CLASS, static::class);
+        return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
     }
 
     abstract public function validate(): bool;
-
-    public function offsetExists($offset)
-    {
-        return property_exists($this, $offset) && $this->{$offset} !== null;
-    }
-
-    public function offsetGet($offset)
-    {
-        if (method_exists($this, 'get' . ucfirst($offset))) {
-            $data = $this->{'get' . ucfirst($offset)}();
-        } else {
-            $data = $this->{$offset};
-        }
-
-        return $this->offsetExists($offset) ? $data : null;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        if ($this->offsetExists($offset)) {
-            $this->{$offset} = $value;
-        }
-    }
-
-    public function offsetUnset($offset)
-    {
-        if ($this->offsetExists($offset)) {
-            $this->{$offset} = null;
-        }
-    }
 }

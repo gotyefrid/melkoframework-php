@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace core\helpers;
 
-use core\Application;
+use core\App;
 
 class Url
 {
@@ -42,11 +43,14 @@ class Url
 
     public static function toRoute(string $path, array $params = []): string
     {
-        $params = array_merge([Application::$app->request->routeParameterName => $path], $params);
+        if (App::$app->isGetParamRouter) {
+            $baseUrl = self::getCurrentUrl(false);
+            $params = array_merge([App::$app->getRequest()->routeParameterName => $path], $params);
 
-        $baseUrl = self::getCurrentUrl(false);
+            return $baseUrl . '?' . http_build_query($params);
+        }
 
-        return $baseUrl . '?' . http_build_query($params);
+        return '/' . $path . ($params ? '?' . http_build_query($params) : '');
     }
 
     public static function toHome(): string
@@ -56,16 +60,6 @@ class Url
 
     public static function currentRoute(): string
     {
-        return $_GET[Application::$app->request->routeParameterName] ?? Application::$app->router::DEFAULT_ROUTE;
-    }
-
-    public static function currentAction(): string
-    {
-        return isset($_GET[Application::$app->request->routeParameterName]) ? (explode('/', $_GET[Application::$app->request->routeParameterName])[1] ?? '') : '';
-    }
-
-    public static function currentController(): string
-    {
-        return isset($_GET[Application::$app->request->routeParameterName]) ? (explode('/', $_GET[Application::$app->request->routeParameterName])[0] ?? '') : '';
+        return $_GET[App::$app->getRequest()->routeParameterName] ?? App::$app->getRequest()->defaultRoute;
     }
 }
