@@ -69,7 +69,19 @@ class User extends Model
             $this->errors['username'] = 'Необходимо заполнить имя пользователя';
         }
 
+        if ($this->password) {
+            if (strlen($this->password) < 3) {
+                $this->errors['password'] = 'Минимум 3 символа';
+            }
+        }
+
         return empty($this->errors);
+    }
+
+    public function save(bool $runValidation = true): bool
+    {
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        return parent::save($runValidation);
     }
 
     /**

@@ -104,4 +104,20 @@ class Request
     {
         return strtolower($this->getMethod()) == strtolower('POST');
     }
+
+    public function isAjax(): bool
+    {
+        // Проверяем, является ли запрос от htmx
+        if (isset($_SERVER['HTTP_HX_REQUEST']) && $_SERVER['HTTP_HX_REQUEST'] === 'true') {
+            return true;
+        }
+
+        // Проверяем, является ли запрос обычным AJAX-запросом
+        if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+            return true;
+        }
+
+        // Если ни одно условие не выполнено, значит это не AJAX/htmx запрос
+        return false;
+    }
 }

@@ -19,7 +19,7 @@ use core\helpers\Url;
 <?php if (isset($itemsPerPageSelectorEnabled) && $itemsPerPageSelectorEnabled): ?>
     <div class="d-flex justify-content-end mb-2">
         <form method="get" id="itemsPerPageForm" class="form-inline"
-              action="<?= Url::getCurrentUrl()  ?>">
+              action="<?= Url::getCurrentUrl() ?>">
             <label for="itemsPerPage" class="me-2">Показать по:</label>
             <select name="itemsPerPage" id="itemsPerPage" class="form-control form-control-sm">
                 <?php
@@ -63,15 +63,22 @@ use core\helpers\Url;
         <?php foreach ($data as $item): ?>
             <tr>
                 <?php foreach ($columns as $columnData): ?>
-                    <?php if ($columnData['attribute'] === '{{actions}}'): ?>
-                        <td><?= $grid->getActionsColumnHtml(ArrayHelper::getValue($item, 'id')) ?></td>
+                    <?php $format = $columnData['format'] ?? ''; ?>
+                    <?php $attribute = $columnData['attribute'] ?? ''; ?>
+                    <?php $value = $columnData['value'] ?? ''; ?>
+                    <?php if ($attribute === '{{actions}}'): ?>
+                        <?php if ($value) : ?>
+                            <td><?= is_callable($value) ? $value($item) : $value ?></td>
+                        <?php else: ?>
+                            <td><?= $grid->getActionsColumnHtml(ArrayHelper::getValue($item, 'id')) ?></td>
+                        <?php endif; ?>
                     <?php else: ?>
                         <td>
                             <?php
-                            $value = $columnData['value'] ?? function ($item) use ($columnData) {
-                                return ArrayHelper::getValue($item, $columnData['attribute'], '');
+                            $value = $columnData['value'] ?? function ($item) use ($attribute) {
+                                return ArrayHelper::getValue($item, $attribute, '');
                             };
-                            echo htmlspecialchars((string)$value($item));
+                            echo $format !== 'raw' ? htmlspecialchars((string)$value($item)) : (string)$value($item);
                             ?>
                         </td>
                     <?php endif; ?>

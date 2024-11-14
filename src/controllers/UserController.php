@@ -38,17 +38,26 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+        $this->titlePage = 'Создание пользователя';
         $user = new User();
 
         if ($this->request->isPost()) {
             $user->username = $_POST['username'];
-            $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $user->password = $_POST['password'];
 
             if ($user->validate() && $user->save()) {
                 FlashMessageWidget::setFlash('success', 'Успешно создано');
-                return $this->redirect('user/index');
+                $redirectUrl = 'user/index';
+
+                if ($this->request->isAjax()) {
+                    header('HX-Redirect: /' . $redirectUrl);
+                    exit();
+                }
+
+                return $this->redirect($redirectUrl);
             }
         }
+
 
         return $this->render('create', ['model' => $user, 'errors' => $user->errors]);
     }
@@ -61,6 +70,7 @@ class UserController extends Controller
      */
     public function actionUpdate()
     {
+        $this->titlePage = 'Обновление пользователя';
         $id = $_GET['id'] ? (int)$_GET['id'] : null;
 
         if (!$id) {
@@ -76,11 +86,18 @@ class UserController extends Controller
 
         if ($this->request->isPost()) {
             $user->username = $_POST['username'];
-            $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $user->password = $_POST['password'];
 
             if ($user->validate() && $user->save()) {
                 FlashMessageWidget::setFlash('success', 'Успешно обновлено');
-                return $this->redirect('user/index');
+                $redirectUrl = 'user/index';
+
+                if ($this->request->isAjax()) {
+                    header('HX-Redirect: /' . $redirectUrl);
+                    exit();
+                }
+
+                return $this->redirect($redirectUrl);
             }
         }
 

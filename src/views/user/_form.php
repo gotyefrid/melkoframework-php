@@ -6,11 +6,19 @@ declare(strict_types=1);
 /** @var bool $update */
 /** @var User $model */
 
+use core\App;
 use core\helpers\ArrayHelper;
 use src\models\User;
 
 ?>
-<form id="createUserForm" method="POST" action="<?= $route ?>">
+<form id="createUserForm" method="POST" action="<?= $route ?>"
+    <?php if (App::$app->getRequest()->isAjax()) : ?>
+        hx-post="<?= $route ?>"
+        hx-target="this"
+        hx-swap="outerHTML"
+        hx-select="#createUserForm"
+    <?php endif; ?>
+>
     <div class="mb-3">
         <label for="username" class="form-label">Логин</label>
         <input type="text" class="form-control <?= isset($errors['username']) ? 'is-invalid' : ''; ?>" id="username"
@@ -33,7 +41,7 @@ use src\models\User;
             <?= implode('<br>', $errors['general']); ?>
         <?php endif; ?>
     </div>
-    <button type="submit" class="btn btn-primary w-100"><?= $update ? 'Обновить' : 'Создать пользователя' ?></button>
+    <button type="submit" class="btn btn-primary w-100"><?= $update ? 'Обновить' : 'Создать' ?></button>
 </form>
 <script>
     $(document).ready(function () {

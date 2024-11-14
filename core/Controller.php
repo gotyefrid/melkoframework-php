@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace core;
@@ -12,6 +12,7 @@ abstract class Controller
     public static string $title = 'Заголовок';
 
     public string $layout = 'main';
+    public string $titlePage = '';
 
     public Request $request;
 
@@ -37,7 +38,24 @@ abstract class Controller
 
         $layoutPath = __DIR__ . '/../src/views/layouts/' . $this->layout . '.php';
 
-        return Renderer::render($layoutPath, ['content' => $content, 'title' => $this::$title]);
+        return Renderer::render($layoutPath, ['content' => $content, 'title' => $this->titlePage ?: static::$title]);
+    }
+
+
+    /**
+     * @throws NotFoundException
+     * @throws Throwable
+     */
+    public function renderPartial(string $view, array $params = []): string
+    {
+        $path = __DIR__ . '/../src/views/' . $this->request->getController() . '/' . $view . '.php';
+
+        if (!file_exists($path)) {
+            $showPath = '../views/' . $this->request->getController() . '/' . $view . '.php';
+            throw new NotFoundException("Файл вида ($showPath) не найден");
+        }
+
+        return Renderer::render($path, $params);
     }
 
     /**

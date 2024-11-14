@@ -44,6 +44,21 @@ class GridView
         return $this;
     }
 
+    /**
+     * @param array $columns
+     * ```php
+     * [
+     *  [
+     *      'attribute' => "string of {{actions}}"
+     *      'label' => "string",
+     *      'format' => "'raw' or null",
+     *      'value' => "value or closure($item)"
+     *  ]
+     * ]
+     * ```
+     *
+     * @return $this
+     */
     public function setColumns(array $columns): self
     {
         $this->columns = $columns;
@@ -183,7 +198,7 @@ class GridView
             $params['itemsPerPage'] = $itemsPerPage;
         }
 
-        return Url::toRoute(Url::currentRoute(), $params);
+        return Url::toRoute(App::$app->getRequest()->getRoute(), $params);
     }
 
     public function getCurrentUrlWithoutParams(array $excludeParams = []): string
@@ -194,7 +209,7 @@ class GridView
         }
         unset($params[App::$app->getRequest()->routeParameterName]);
 
-        return Url::toRoute(Url::currentRoute(), $params);
+        return Url::toRoute(App::$app->getRequest()->getRoute(), $params);
     }
 
     public function getActionsColumnHtml(int $id): string
