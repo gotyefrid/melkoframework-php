@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace core\helpers;
@@ -14,17 +15,20 @@ class GridView
     private bool $paginationEnabled = false;
     private int $currentPage = 1;
     private int $defaultItemsPerPage = 10;
-    private bool $itemsPerPageSelectorEnabled = true;
+    private bool $perPageSelector = true;
 
     public function __construct(array $data = [])
     {
         $this->dataProvider = $data;
     }
 
-    public function setPagination(bool $enabled, int $itemsPerPage = 10): self
+    public function enablePagination(int $itemsPerPage = 10): self
     {
-        $this->paginationEnabled = $enabled;
-        $this->defaultItemsPerPage = $itemsPerPage;
+        $this->paginationEnabled = true;
+
+        if ($itemsPerPage) {
+            $this->defaultItemsPerPage = $itemsPerPage;
+        }
 
         return $this;
     }
@@ -36,9 +40,9 @@ class GridView
         return $this;
     }
 
-    public function enableItemsPerPageSelector(bool $enabled = true): self
+    public function setPerPageSelector(bool $enabled = true): self
     {
-        $this->itemsPerPageSelectorEnabled = $enabled;
+        $this->perPageSelector = $enabled;
 
         return $this;
     }
@@ -87,7 +91,7 @@ class GridView
             'pagination' => $paginationControls,
             'grid' => $this,
             'itemsPerPage' => $itemsPerPage,
-            'itemsPerPageSelectorEnabled' => $this->itemsPerPageSelectorEnabled,
+            'perPageSelector' => $this->perPageSelector,
         ]);
     }
 
@@ -119,7 +123,7 @@ class GridView
 
     private function getItemsPerPage()
     {
-        if (!$this->itemsPerPageSelectorEnabled) {
+        if (!$this->perPageSelector) {
             return $this->defaultItemsPerPage;
         }
 
@@ -192,7 +196,7 @@ class GridView
         $params['page'] = $page;
         unset($params[app()->getRequest()->routeParameterName]);
 
-        if ($this->itemsPerPageSelectorEnabled) {
+        if ($this->perPageSelector) {
             $itemsPerPage = $this->getItemsPerPage();
             $params['itemsPerPage'] = $itemsPerPage;
         }

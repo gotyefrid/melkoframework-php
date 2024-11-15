@@ -55,7 +55,7 @@ $grid->setColumns([
         }
     ],
 ]);
-$grid->setPagination(true, 5);
+$grid->enablePagination();
 $grid->setCurrentPage((int)($_GET['page'] ?? 1));
 
 ?>

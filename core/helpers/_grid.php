@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @var array<array{attribute: string, label: string, value?: callable(mixed): mixed}> $columns
  * @var string $pagination
  * @var int|string $itemsPerPage
- * @var bool $itemsPerPageSelectorEnabled
+ * @var bool $perPageSelector
  */
 
 use core\helpers\ArrayHelper;
@@ -16,7 +16,7 @@ use core\helpers\Url;
 
 ?>
 
-<?php if (isset($itemsPerPageSelectorEnabled) && $itemsPerPageSelectorEnabled): ?>
+<?php if (isset($perPageSelector) && $perPageSelector): ?>
     <div class="d-flex justify-content-end mb-2">
         <form method="get" id="itemsPerPageForm" class="form-inline"
               action="<?= Url::getCurrentUrl() ?>">
