@@ -3,18 +3,21 @@ declare(strict_types=1);
 
 namespace core\helpers;
 
+use Closure;
+
 class ArrayHelper
 {
     /**
-     * @param $array
-     * @param $key
-     * @param $default
+     * Implemented from Yii2
+     * @param array|object $array
+     * @param array|string|callable $key
+     * @param mixed $default
      *
-     * @return mixed|null
+     * @return mixed
      */
     public static function getValue($array, $key, $default = null)
     {
-        if ($key instanceof \Closure) {
+        if ($key instanceof Closure) {
             return $key($array, $default);
         }
 
@@ -30,7 +33,7 @@ class ArrayHelper
             return $array->$key;
         }
 
-        if (array_key_exists($key, $array)) {
+        if (!is_object($array) && array_key_exists($key, $array)) {
             return $array[$key];
         }
 
@@ -39,10 +42,11 @@ class ArrayHelper
             $key = substr($key, $pos + 1);
         }
 
-        if (array_key_exists($key, $array)) {
+        if (!is_object($array) && array_key_exists($key, $array)) {
             return $array[$key];
         }
-        if (is_object($array)) {
+
+        if (is_object($array) && property_exists($array, $key)) {
             return $array->$key;
         }
 
