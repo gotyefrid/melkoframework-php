@@ -1,4 +1,5 @@
-<?php /** @noinspection PhpUnhandledExceptionInspection */
+<?php /** @noinspection PhpUnused */
+/** @noinspection PhpUnhandledExceptionInspection */
 declare(strict_types=1);
 error_reporting(E_ALL);
 
@@ -29,4 +30,15 @@ function app(): App
 {
     global $app;
     return $app;
+}
+
+/**
+ * Dumper
+ * @param mixed ...$values
+ *
+ * @return void
+ */
+function dd(...$values)
+{
+    var_dump(...$values);die;
 }
