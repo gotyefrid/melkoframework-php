@@ -7,6 +7,12 @@ use Throwable;
 
 class Renderer
 {
+    /**
+     * @param string $absoluteFilePath
+     * @param array $params variables to be passed to the view file
+     *
+     * @return string
+     */
     public static function render(string $absoluteFilePath, array $params = []): string
     {
         $_obInitialLevel_ = ob_get_level();
