@@ -18,7 +18,7 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->request = App::$app->getRequest();
+        $this->request = app()->getRequest();
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class Controller
         }
 
         // Если роутинг через GET-параметр, добавляем параметр маршрута
-        if (App::$app->isGetParamRouter) {
+        if (app()->isGetParamRouter) {
             $params = array_merge([$this->request->routeParameterName => $route], $params);
             $url = '/?' . http_build_query($params);
         } else {

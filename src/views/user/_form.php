@@ -6,13 +6,12 @@ declare(strict_types=1);
 /** @var bool $update */
 /** @var User $model */
 
-use core\App;
 use core\helpers\ArrayHelper;
 use src\models\User;
 
 ?>
 <form id="createUserForm" method="POST" action="<?= $route ?>"
-    <?php if (App::$app->getRequest()->isAjax()) : ?>
+    <?php if (app()->getRequest()->isAjax()) : ?>
         hx-post="<?= $route ?>"
         hx-target="this"
         hx-swap="outerHTML"

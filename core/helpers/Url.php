@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace core\helpers;
 
-use core\App;
 
 class Url
 {
@@ -46,8 +45,8 @@ class Url
 
     public static function toRoute(string $path, array $params = []): string
     {
-        if (App::$app->isGetParamRouter) {
-            $params = array_merge([App::$app->getRequest()->routeParameterName => $path], $params);
+        if (app()->isGetParamRouter) {
+            $params = array_merge([app()->getRequest()->routeParameterName => $path], $params);
 
             return '/' . '?' . http_build_query($params);
         }

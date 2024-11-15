@@ -9,7 +9,7 @@ use core\ErrorHandler;
 use core\Request;
 
 if (preg_match('/\.(?!php|db$).+$/', $_SERVER["REQUEST_URI"])) {
-    return false;  // сервер возвращает все файлы кроме указанных напрямую.
+    return false;  // server returns all files except those specified directly
 }
 
 $app = new App(
@@ -19,3 +19,14 @@ $app = new App(
     false
 );
 $app->run();
+
+
+/**
+ * For global access to an application with a short name
+ * @return App
+ */
+function app(): App
+{
+    global $app;
+    return $app;
+}

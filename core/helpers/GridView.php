@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace core\helpers;
 
-use core\App;
 use core\Model;
 use DomainException;
 use Throwable;
@@ -191,14 +190,14 @@ class GridView
     {
         $params = $_GET;
         $params['page'] = $page;
-        unset($params[App::$app->getRequest()->routeParameterName]);
+        unset($params[app()->getRequest()->routeParameterName]);
 
         if ($this->itemsPerPageSelectorEnabled) {
             $itemsPerPage = $this->getItemsPerPage();
             $params['itemsPerPage'] = $itemsPerPage;
         }
 
-        return Url::toRoute(App::$app->getRequest()->getRoute(), $params);
+        return Url::toRoute(app()->getRequest()->getRoute(), $params);
     }
 
     public function getCurrentUrlWithoutParams(array $excludeParams = []): string
@@ -207,15 +206,15 @@ class GridView
         foreach ($excludeParams as $param) {
             unset($params[$param]);
         }
-        unset($params[App::$app->getRequest()->routeParameterName]);
+        unset($params[app()->getRequest()->routeParameterName]);
 
-        return Url::toRoute(App::$app->getRequest()->getRoute(), $params);
+        return Url::toRoute(app()->getRequest()->getRoute(), $params);
     }
 
     public function getActionsColumnHtml(int $id): string
     {
-        $updateUrl = Url::toRoute(App::$app->getRequest()->getController() . '/update', ['id' => $id]);
-        $deleteUrl = Url::toRoute(App::$app->getRequest()->getController() . '/delete', ['id' => $id]);
+        $updateUrl = Url::toRoute(app()->getRequest()->getController() . '/update', ['id' => $id]);
+        $deleteUrl = Url::toRoute(app()->getRequest()->getController() . '/delete', ['id' => $id]);
 
         return <<<HTML
         <div class="action-buttons">

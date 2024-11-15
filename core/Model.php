@@ -42,7 +42,7 @@ abstract class Model
     public function delete(): bool
     {
         $sql = 'DELETE FROM ' . static::tableName() . ' WHERE id = :id';
-        $stmt = App::$app->getPdo()->prepare($sql);
+        $stmt = app()->getPdo()->prepare($sql);
 
         return $stmt->execute([':id' => $this->id]);
     }
@@ -80,7 +80,7 @@ abstract class Model
             $sql = 'INSERT INTO ' . static::tableName() . " ($columnsList) VALUES ($placeholders)";
         }
 
-        $stmt = App::$app->getPdo()->prepare($sql);
+        $stmt = app()->getPdo()->prepare($sql);
 
         // Привязка значений к подготовленному запросу
         foreach ($properties as $column => $value) {
@@ -89,7 +89,7 @@ abstract class Model
 
         if ($stmt->execute()) {
             if (!isset($properties['id']) || !$properties['id']) {
-                $this->id = App::$app->getPdo()->lastInsertId(); // Присваивание ID, если это было создание новой записи
+                $this->id = app()->getPdo()->lastInsertId(); // Присваивание ID, если это было создание новой записи
             }
             return true;
         }
@@ -105,7 +105,7 @@ abstract class Model
      */
     public static function find(string $sql, array $params = []): array
     {
-        $stmt = App::$app->getPdo()->prepare($sql);
+        $stmt = app()->getPdo()->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_CLASS, static::class);
     }

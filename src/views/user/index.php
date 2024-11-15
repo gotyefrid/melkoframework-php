@@ -1,7 +1,6 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 declare(strict_types=1);
 
-use core\App;
 use core\helpers\GridView;
 use core\helpers\Renderer;
 use core\helpers\Url;
@@ -16,8 +15,8 @@ $grid->setColumns([
         'label' => 'Действия',
         'format' => 'raw',
         'value' => static function (User $model) {
-            $updateUrl = Url::toRoute(App::$app->getRequest()->getController() . '/update', ['id' => $model->id]);
-            $deleteUrl = Url::toRoute(App::$app->getRequest()->getController() . '/delete', ['id' => $model->id]);
+            $updateUrl = Url::toRoute(app()->getRequest()->getController() . '/update', ['id' => $model->id]);
+            $deleteUrl = Url::toRoute(app()->getRequest()->getController() . '/delete', ['id' => $model->id]);
 
             return <<<HTML
             <div class="action-buttons">
