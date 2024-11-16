@@ -8,7 +8,6 @@ use Throwable;
 
 class App
 {
-    public static App $app;
     public bool $isGetParamRouter;
     private Request $request;
     private PDO $pdo;
@@ -16,7 +15,7 @@ class App
 
 
     public function __construct(
-        Request $request,
+        AbstractRequest $request,
         PDO $pdo,
         ErrorHandler $errorHandler,
         bool $isGetParamRouter = false
@@ -26,7 +25,6 @@ class App
         $this->pdo = $pdo;
         $this->errorHandler = $errorHandler;
         $this->isGetParamRouter = $isGetParamRouter;
-        self::$app = $this;
     }
 
     /**
@@ -37,8 +35,10 @@ class App
     {
         try {
             echo $this->getRequest()->resolve();
+            exit();
         } catch (Throwable $e) {
-            echo self::$app->getErrorHandler()->handle($e);
+            echo $this->getErrorHandler()->handle($e);
+            exit();
         }
     }
 
