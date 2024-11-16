@@ -7,13 +7,24 @@ use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 
 abstract class AbstractRequest
 {
-    public string $defaultRoute = 'home/index';
-    public string $routeParameterName = 'route';
-    public string $controllerNamespace = 'src\\controllers\\';
+    public string $defaultRoute;
+    public string $routeParameterName;
+    public string $controllerNamespace;
     protected string $route;
 
     protected string $controllerId;
     protected string $actionId;
+
+    public function __construct(
+        $controllerNamespace = 'melkoframework\\controllers\\',
+        $routeParameterName = 'route',
+        $defaultRoute = 'home/index'
+    )
+    {
+        $this->controllerNamespace = $controllerNamespace;
+        $this->routeParameterName = $routeParameterName;
+        $this->defaultRoute = $defaultRoute;
+    }
 
     /**
      * @return mixed

@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "565e1b0e5711182c43d2b26d79c3bb85",
+    "content-hash": "56827092120ee0083ce19251eae219e3",
     "packages": [
         {
             "name": "gotyefrid/melkoframework-core",
-            "version": "v0.0.2",
+            "version": "v0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gotyefrid/melkoframework-core.git",
-                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943"
+                "reference": "24ea99f528f2a2a2db7b6f2c15a5df3566356bc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gotyefrid/melkoframework-core/zipball/739ca5d56d12057bdb2410ee61fd964c726cf943",
-                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943",
+                "url": "https://api.github.com/repos/gotyefrid/melkoframework-core/zipball/24ea99f528f2a2a2db7b6f2c15a5df3566356bc9",
+                "reference": "24ea99f528f2a2a2db7b6f2c15a5df3566356bc9",
                 "shasum": ""
             },
             "require": {
@@ -42,9 +42,9 @@
             "description": "Mini framework with a basic architecture that can be run on any PHP hosting",
             "support": {
                 "issues": "https://github.com/gotyefrid/melkoframework-core/issues",
-                "source": "https://github.com/gotyefrid/melkoframework-core/tree/v0.0.2"
+                "source": "https://github.com/gotyefrid/melkoframework-core/tree/v0.0.3"
             },
-            "time": "2024-11-16T19:43:24+00:00"
+            "time": "2024-11-16T20:19:15+00:00"
         }
     ],
     "packages-dev": [],

@@ -111,15 +111,6 @@ abstract class Controller
         exit();
     }
 
-    public function checkAuth(): void
-    {
-        $auth = new Auth();
-
-        if (!$auth->isAuthenticated()) {
-            $this->redirect('auth/login');
-        }
-    }
-
     /**
      * @param string $action
      *
