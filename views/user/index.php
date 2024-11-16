@@ -5,7 +5,7 @@ use Gotyefrid\MelkoframeworkCore\App;
 use Gotyefrid\MelkoframeworkCore\helpers\GridView;
 use Gotyefrid\MelkoframeworkCore\helpers\Renderer;
 use Gotyefrid\MelkoframeworkCore\helpers\Url;
-use src\models\User;
+use melkoframework\models\User;
 
 /** @var User[] $users */
 

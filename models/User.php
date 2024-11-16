@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace src\models;
+namespace melkoframework\models;
 
 use Gotyefrid\MelkoframeworkCore\Model;
 

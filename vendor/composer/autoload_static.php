@@ -7,13 +7,9 @@ namespace Composer\Autoload;
 class ComposerStaticInite440ee395cff48966964af05ff54db4a
 {
     public static $prefixLengthsPsr4 = array (
-        's' => 
+        'm' => 
         array (
-            'src\\' => 4,
-        ),
-        'c' => 
-        array (
-            'core\\' => 5,
+            'melkoframework\\' => 15,
         ),
         'G' => 
         array (
@@ -22,13 +18,9 @@ class ComposerStaticInite440ee395cff48966964af05ff54db4a
     );
 
     public static $prefixDirsPsr4 = array (
-        'src\\' => 
+        'melkoframework\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
-        'core\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/core',
+            0 => __DIR__ . '/../..' . '/',
         ),
         'Gotyefrid\\MelkoframeworkCore\\' => 
         array (

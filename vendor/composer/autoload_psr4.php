@@ -6,7 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'src\\' => array($baseDir . '/src'),
-    'core\\' => array($baseDir . '/core'),
+    'melkoframework\\' => array($baseDir . '/'),
     'Gotyefrid\\MelkoframeworkCore\\' => array($vendorDir . '/gotyefrid/melkoframework-core/src'),
 );

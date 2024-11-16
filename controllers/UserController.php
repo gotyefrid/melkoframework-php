@@ -1,12 +1,12 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace src\controllers;
+namespace melkoframework\controllers;
 
 use Gotyefrid\MelkoframeworkCore\exceptions\BadRequestException;
 use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 use Gotyefrid\MelkoframeworkCore\FlashMessageWidget;
-use src\models\User;
+use melkoframework\models\User;
 use Throwable;
 
 class UserController extends BaseController

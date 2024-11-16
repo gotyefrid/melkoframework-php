@@ -1,12 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use Gotyefrid\MelkoframeworkCore\helpers\Url;
+use melkoframework\models\User;
+
 /** @var array $errors */
 /** @var User $model */
-
-use Gotyefrid\MelkoframeworkCore\helpers\Url;
-use src\models\User;
-
 ?>
 <div class="container mt-5">
     <div class="row justify-content-center">

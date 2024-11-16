@@ -1,22 +1,22 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace src\controllers;
+namespace melkoframework\controllers;
 
-use Gotyefrid\MelkoframeworkCore\Auth;
 use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
-use src\models\User;
+use melkoframework\models\User;
+use melkoframework\services\AuthService;
 use Throwable;
 
 class AuthController extends BaseController
 {
-    private Auth $auth;
+    private AuthService $auth;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->auth = new Auth();
+        $this->auth = new AuthService();
     }
 
     /**

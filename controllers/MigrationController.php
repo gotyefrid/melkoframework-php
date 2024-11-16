@@ -1,10 +1,10 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace src\controllers;
+namespace melkoframework\controllers;
 
 use Gotyefrid\MelkoframeworkCore\App;
-use src\models\User;
+use melkoframework\models\User;
 
 class MigrationController extends BaseController
 {

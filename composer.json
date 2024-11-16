@@ -2,8 +2,7 @@
     "name": "gotyefrid/melkoframework-php",
     "autoload": {
         "psr-4": {
-            "src\\": "src/",
-            "core\\": "core/"
+            "melkoframework\\": "./"
         }
     },
   "require": {

@@ -15,10 +15,10 @@ use Gotyefrid\MelkoframeworkCore\FlashMessageWidget;
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/src/views/layouts/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="/src/views/layouts/css/bootstrap-icons.css">
-    <title><?= $title ?? 'Заголовок' ?></title>
-    <script src="/src/views/layouts/js/jquery-3.7.1.js"></script>
+    <link href="/views/layouts/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="/views/layouts/css/bootstrap-icons.css">
+    <title><?= $title ?? 'Title' ?></title>
+    <script src="/views/layouts/js/jquery-3.7.1.js"></script>
     <script src="https://unpkg.com/htmx.org@2.0.3"></script>
 </head>
 <body>
@@ -31,6 +31,6 @@ use Gotyefrid\MelkoframeworkCore\FlashMessageWidget;
         <?= $content ?>
     </div>
 </div>
-<script src="/src/views/layouts/js/bootstrap.bundle.js"></script>
+<script src="/views/layouts/js/bootstrap.bundle.js"></script>
 </body>
 </html>

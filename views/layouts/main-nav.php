@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 use Gotyefrid\MelkoframeworkCore\App;
 use Gotyefrid\MelkoframeworkCore\helpers\Url;
-use src\controllers\HomeController;
-use src\controllers\UserController;
+use melkoframework\controllers\HomeController;
+use melkoframework\controllers\UserController;
 
 $items = [
     [

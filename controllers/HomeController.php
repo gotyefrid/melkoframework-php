@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace src\controllers;
+namespace melkoframework\controllers;
 
 use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 use Throwable;

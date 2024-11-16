@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 use Gotyefrid\MelkoframeworkCore\App;
 use Gotyefrid\MelkoframeworkCore\helpers\ArrayHelper;
-use src\models\User;
+use melkoframework\models\User;
 
 ?>
 <form id="createUserForm" method="POST" action="<?= $route ?>"

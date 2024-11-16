@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Gotyefrid\MelkoframeworkCore;
+namespace melkoframework\services;
 
-use src\models\User;
 use Exception;
+use melkoframework\models\User;
 
-class Auth
+class AuthService
 {
     protected ?User $user = null;
 

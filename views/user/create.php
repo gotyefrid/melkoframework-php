@@ -6,18 +6,18 @@ declare(strict_types=1);
 
 use Gotyefrid\MelkoframeworkCore\helpers\Renderer;
 use Gotyefrid\MelkoframeworkCore\helpers\Url;
-use src\models\User;
+use melkoframework\models\User;
 
 ?>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <h3 class="text-center mb-4">Редактировать пользователя</h3>
+            <h3 class="text-center mb-4">Создать пользователя</h3>
             <?= Renderer::render(__DIR__ . '/_form.php', [
                 'errors' => $errors,
                 'model' => $model,
-                'update' => true,
-                'route' => Url::toRoute('user/update', ['id' => $model->id]),
+                'update' => false,
+                'route' => Url::toRoute('user/create'),
             ]) ?>
         </div>
     </div>
