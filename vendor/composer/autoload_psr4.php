@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'src\\' => array($baseDir . '/src'),
     'core\\' => array($baseDir . '/core'),
+    'Gotyefrid\\MelkoframeworkCore\\' => array($vendorDir . '/gotyefrid/melkoframework-core/src'),
 );

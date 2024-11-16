@@ -1,9 +1,10 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 declare(strict_types=1);
 
-use core\helpers\GridView;
-use core\helpers\Renderer;
-use core\helpers\Url;
+use Gotyefrid\MelkoframeworkCore\App;
+use Gotyefrid\MelkoframeworkCore\helpers\GridView;
+use Gotyefrid\MelkoframeworkCore\helpers\Renderer;
+use Gotyefrid\MelkoframeworkCore\helpers\Url;
 use src\models\User;
 
 /** @var User[] $users */
@@ -15,8 +16,8 @@ $grid->setColumns([
         'label' => 'Действия',
         'format' => 'raw',
         'value' => static function (User $model) {
-            $updateUrl = Url::toRoute(app()->getRequest()->getController() . '/update', ['id' => $model->id]);
-            $deleteUrl = Url::toRoute(app()->getRequest()->getController() . '/delete', ['id' => $model->id]);
+            $updateUrl = Url::toRoute(App::get()->getRequest()->getController() . '/update', ['id' => $model->id]);
+            $deleteUrl = Url::toRoute(App::get()->getRequest()->getController() . '/delete', ['id' => $model->id]);
 
             return <<<HTML
             <div class="action-buttons">

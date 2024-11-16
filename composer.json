@@ -8,6 +8,7 @@
     },
   "require": {
     "php": ">=7.4",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+        "gotyefrid/melkoframework-core": "^0.0.2"
   }
 }

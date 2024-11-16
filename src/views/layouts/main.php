@@ -6,7 +6,7 @@ declare(strict_types=1);
  * @var string $title
  */
 
-use core\FlashMessageWidget;
+use Gotyefrid\MelkoframeworkCore\FlashMessageWidget;
 ?>
 
 <!DOCTYPE html>

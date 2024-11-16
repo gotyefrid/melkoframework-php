@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\models;
 
-use core\Model;
+use Gotyefrid\MelkoframeworkCore\Model;
 
 class User extends Model
 {

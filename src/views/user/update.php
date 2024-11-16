@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 /** @var User $model */
 
-use core\helpers\Renderer;
-use core\helpers\Url;
+use Gotyefrid\MelkoframeworkCore\helpers\Renderer;
+use Gotyefrid\MelkoframeworkCore\helpers\Url;
 use src\models\User;
 
 ?>

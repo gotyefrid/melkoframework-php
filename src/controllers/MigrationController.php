@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use Gotyefrid\MelkoframeworkCore\Controller;
+use Gotyefrid\MelkoframeworkCore\App;
 use src\models\User;
 
 class MigrationController extends BaseController
@@ -29,12 +29,12 @@ class MigrationController extends BaseController
 
     private function initUserTable(): void
     {
-        $result = app()->getPdo()->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users';");
+        $result = App::get()->getPdo()->query("SELECT name FROM sqlite_master WHERE type='table' AND name='users';");
 
         if ($result->fetch()) {
             echo "Таблица users уже существует <br>";
         } else {
-            app()->getPdo()->exec("CREATE TABLE IF NOT EXISTS users (
+            App::get()->getPdo()->exec("CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY,
                     username TEXT,
                     password TEXT

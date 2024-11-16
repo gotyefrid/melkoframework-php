@@ -93,7 +93,7 @@ Example:
 ```php
 namespace src\models;
 
-use core\Model;
+use Gotyefrid\MelkoframeworkCore\Model;
 
 class User extends Model
 {
@@ -145,7 +145,7 @@ For example, in the `UserController`, the view rendering can be done like this i
 ```php
 namespace src\controllers;
 
-use core\Controller;
+use Gotyefrid\MelkoframeworkCore\Controller;
 
 class UserController extends Controller
 {

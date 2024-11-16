@@ -6,12 +6,13 @@ declare(strict_types=1);
 /** @var bool $update */
 /** @var User $model */
 
-use core\helpers\ArrayHelper;
+use Gotyefrid\MelkoframeworkCore\App;
+use Gotyefrid\MelkoframeworkCore\helpers\ArrayHelper;
 use src\models\User;
 
 ?>
 <form id="createUserForm" method="POST" action="<?= $route ?>"
-    <?php if (app()->getRequest()->isAjax()) : ?>
+    <?php if (App::get()->getRequest()->isAjax()) : ?>
         hx-post="<?= $route ?>"
         hx-target="this"
         hx-swap="outerHTML"

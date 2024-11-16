@@ -5,9 +5,9 @@ error_reporting(E_ALL);
 
 require __DIR__ . '/vendor/autoload.php';
 
-use core\App;
-use core\ErrorHandler;
-use core\Request;
+use Gotyefrid\MelkoframeworkCore\App;
+use Gotyefrid\MelkoframeworkCore\ErrorHandler;
+use Gotyefrid\MelkoframeworkCore\Request;
 
 if (preg_match('/\.(?!php|db$).+$/', $_SERVER["REQUEST_URI"])) {
     return false;  // server returns all files except those specified directly
@@ -20,17 +20,6 @@ $app = new App(
     false
 );
 $app->run();
-
-
-/**
- * For global access to an application with a short name
- * @return App
- */
-function app(): App
-{
-    global $app;
-    return $app;
-}
 
 /**
  * Dumper

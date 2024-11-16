@@ -1,5 +1,49 @@
 {
-    "packages": [],
+    "packages": [
+        {
+            "name": "gotyefrid/melkoframework-core",
+            "version": "v0.0.2",
+            "version_normalized": "0.0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gotyefrid/melkoframework-core.git",
+                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gotyefrid/melkoframework-core/zipball/739ca5d56d12057bdb2410ee61fd964c726cf943",
+                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "time": "2024-11-16T19:43:24+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Gotyefrid\\MelkoframeworkCore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MeL",
+                    "email": "gotye.f@yandex.ru"
+                }
+            ],
+            "description": "Mini framework with a basic architecture that can be run on any PHP hosting",
+            "support": {
+                "issues": "https://github.com/gotyefrid/melkoframework-core/issues",
+                "source": "https://github.com/gotyefrid/melkoframework-core/tree/v0.0.2"
+            },
+            "install-path": "../gotyefrid/melkoframework-core"
+        }
+    ],
     "dev": true,
     "dev-package-names": []
 }

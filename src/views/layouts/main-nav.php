@@ -1,24 +1,25 @@
 <?php
 declare(strict_types=1);
 
-use core\helpers\Url;
+use Gotyefrid\MelkoframeworkCore\App;
+use Gotyefrid\MelkoframeworkCore\helpers\Url;
 use src\controllers\HomeController;
 use src\controllers\UserController;
 
 $items = [
     [
         'url' => Url::toRoute('home/index'),
-        'active' => app()->getRequest()->getRoute() === 'home/index',
+        'active' => App::get()->getRequest()->getRoute() === 'home/index',
         'label' => HomeController::$title,
     ],
     [
         'url' => Url::toRoute('user/index'),
-        'active' => app()->getRequest()->getRoute() === 'user/index',
+        'active' => App::get()->getRequest()->getRoute() === 'user/index',
         'label' => UserController::$title,
     ],
     [
         'url' => Url::toRoute('auth/logout'),
-        'active' => app()->getRequest()->getRoute() === 'auth/logout',
+        'active' => App::get()->getRequest()->getRoute() === 'auth/logout',
         'label' => 'Выйти',
     ],
 ];

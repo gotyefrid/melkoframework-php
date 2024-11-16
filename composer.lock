@@ -4,15 +4,59 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12e73c1afb14cf68bb37d4c7a8293a7e",
-    "packages": [],
+    "content-hash": "565e1b0e5711182c43d2b26d79c3bb85",
+    "packages": [
+        {
+            "name": "gotyefrid/melkoframework-core",
+            "version": "v0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gotyefrid/melkoframework-core.git",
+                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gotyefrid/melkoframework-core/zipball/739ca5d56d12057bdb2410ee61fd964c726cf943",
+                "reference": "739ca5d56d12057bdb2410ee61fd964c726cf943",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gotyefrid\\MelkoframeworkCore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MeL",
+                    "email": "gotye.f@yandex.ru"
+                }
+            ],
+            "description": "Mini framework with a basic architecture that can be run on any PHP hosting",
+            "support": {
+                "issues": "https://github.com/gotyefrid/melkoframework-core/issues",
+                "source": "https://github.com/gotyefrid/melkoframework-core/tree/v0.0.2"
+            },
+            "time": "2024-11-16T19:43:24+00:00"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=7.4",
+        "ext-pdo": "*"
+    },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

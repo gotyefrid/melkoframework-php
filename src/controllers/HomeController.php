@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use Gotyefrid\MelkoframeworkCore\Controller;
 use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 use Throwable;
 

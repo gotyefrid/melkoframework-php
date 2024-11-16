@@ -1,0 +1,21 @@
+{
+    "name": "gotyefrid/melkoframework-core",
+    "description": "Mini framework with a basic architecture that can be run on any PHP hosting",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Gotyefrid\\MelkoframeworkCore\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MeL",
+            "email": "gotye.f@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    }
+}
+
