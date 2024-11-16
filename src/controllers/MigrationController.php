@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use core\Controller;
+use Gotyefrid\MelkoframeworkCore\Controller;
 use src\models\User;
 
-class MigrationController extends Controller
+class MigrationController extends BaseController
 {
     public function actionMigrate(): void
     {

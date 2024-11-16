@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use core\Controller;
-use core\exceptions\NotFoundException;
+use Gotyefrid\MelkoframeworkCore\Controller;
+use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 use Throwable;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     public static string $title = 'Главная';
 

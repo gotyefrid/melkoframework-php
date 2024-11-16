@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace src\controllers;
 
-use core\Auth;
-use core\Controller;
-use core\exceptions\NotFoundException;
+use Gotyefrid\MelkoframeworkCore\Auth;
+use Gotyefrid\MelkoframeworkCore\exceptions\NotFoundException;
 use src\models\User;
 use Throwable;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     private Auth $auth;
 
