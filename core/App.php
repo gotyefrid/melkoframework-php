@@ -17,7 +17,7 @@ class App
     public function __construct(
         AbstractRequest $request,
         PDO $pdo,
-        ErrorHandler $errorHandler,
+        AbstractErrorHandler $errorHandler,
         bool $isGetParamRouter = false
     )
     {

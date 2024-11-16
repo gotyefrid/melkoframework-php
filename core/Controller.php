@@ -14,7 +14,7 @@ abstract class Controller
     public string $layout = 'main';
     public string $titlePage = '';
 
-    public Request $request;
+    public AbstractRequest $request;
 
     public function __construct()
     {
